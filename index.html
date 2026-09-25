@@ -32,6 +32,8 @@
             margin: 15px 0;
             display: flex;
             gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
         button {
             background-color: #2a2a3a;
@@ -55,49 +57,45 @@
             background-color: #000000;
             position: relative;
         }
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Arcade & Emulator Hub</h1>
+        <h1>Arcade & Retro Hub</h1>
     </header>
 
     <div class="nav-buttons">
-        <button onclick="loadGame('webgl')">Browser Game</button>
-        <button onclick="loadGame('gba')">GBA Emulator</button>
+        <button onclick="loadWebGame('https://html5.gamedistribution.com/rvvAS300/a31c360b947c4333b28b7e6ee57a7e3d/')">HTML5 Game</button>
+        <button onclick="loadROM('https://raw.githubusercontent.com/dwelch67/gba_samples/master/thumb/blinker01/blink.gba', 'gba')">GBA Sample Demo</button>
     </div>
 
     <div id="viewport">
-        <div id="game"></div>
+        <div id="game" style="width:100%; height:100%;"></div>
     </div>
 
     <script>
-        function loadGame(type) {
+        function loadWebGame(url) {
+            const container = document.getElementById('game');
+            container.innerHTML = `<iframe src="${url}" style="width:100%; height:100%; border:none;" allowgamepad allowfullscreen></iframe>`;
+        }
+
+        function loadROM(romUrl, system) {
             const container = document.getElementById('game');
             container.innerHTML = '';
 
-            if (type === 'webgl') {
-                container.innerHTML = '<iframe src="https://play.gamenora.com" allowgamepad allowfullscreen></iframe>';
-            } else if (type === 'gba') {
-                window.EJS_player = '#game';
-                window.EJS_core = 'gba';
-                window.EJS_gameUrl = ''; // Paste direct link to a .gba ROM file here
-                window.EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
+            window.EJS_player = '#game';
+            window.EJS_core = system; // 'gba', 'nds', 'n64', 'nes', 'snes'
+            window.EJS_gameUrl = romUrl; // Direct link ending in extension
+            window.EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
 
-                const script = document.createElement('script');
-                script.src = 'https://cdn.emulatorjs.org/stable/data/loader.js';
-                document.body.appendChild(script);
-            }
+            const script = document.createElement('script');
+            script.src = 'https://cdn.emulatorjs.org/stable/data/loader.js';
+            document.body.appendChild(script);
         }
 
-        // Load default on start
-        loadGame('webgl');
+        // Default start game
+        loadWebGame('https://html5.gamedistribution.com/rvvAS300/a31c360b947c4333b28b7e6ee57a7e3d/');
     </script>
 
 </body>
