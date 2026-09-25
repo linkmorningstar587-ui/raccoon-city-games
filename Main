@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arcade Hub</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #121212; color: #fff; font-family: Arial, sans-serif; text-align: center; }
+    header { background: #1f1f1f; padding: 15px; border-bottom: 2px solid #333; }
+    .grid { display: flex; justify-content: center; gap: 15px; padding: 20px; flex-wrap: wrap; }
+    .card { background: #242424; border: 1px solid #333; border-radius: 8px; padding: 15px; width: 200px; cursor: pointer; transition: 0.2s; }
+    .card:hover { background: #333; border-color: #007acc; }
+    #game-box { width: 100%; margin-top: 20px; display: flex; justify-content: center; }
+    iframe { width: 800px; height: 600px; max-width: 95vw; border: none; border-radius: 8px; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Browser Arcade</h1>
+    <p>Low-RAM / Unlimited Playtime</p>
+  </header>
+
+  <div class="grid">
+    <!-- Game 1: GBA Emulator -->
+    <div class="card" onclick="loadGBA()">
+      <h3>GBA Games</h3>
+      <p>Pokemon, Zelda, Mario</p>
+    </div>
+
+    <!-- Game 2: N64 Emulator -->
+    <div class="card" onclick="loadN64()">
+      <h3>N64 Games</h3>
+      <p>Super Mario 64, Kart</p>
+    </div>
+
+    <!-- Game 3: GeForce NOW Free Stream -->
+    <div class="card" onclick="loadCloud()">
+      <h3>GeForce NOW</h3>
+      <p>Free Cloud Stream (1hr sessions)</p>
+    </div>
+  </div>
+
+  <div id="game-box"></div>
+
+  <script>
+    // Loads EmulatorJS for GBA
+    function loadGBA() {
+      document.getElementById('game-box').innerHTML = `<div id="game"></div>`;
+      EJS_player = '#game';
+      EJS_core = 'gba';
+      EJS_gameUrl = 'YOUR_DIRECT_ROM_LINK.gba'; // Replace with link to a .gba file hosted online
+      EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
+      
+      let script = document.createElement('script');
+      script.src = 'https://cdn.emulatorjs.org/stable/data/loader.js';
+      document.body.appendChild(script);
+    }
+
+    // Loads EmulatorJS for N64
+    function loadN64() {
+      document.getElementById('game-box').innerHTML = `<div id="game"></div>`;
+      EJS_player = '#game';
+      EJS_core = 'n64';
+      EJS_gameUrl = 'YOUR_DIRECT_ROM_LINK.z64'; // Replace with link to a .z64 file
+      EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
+      
+      let script = document.createElement('script');
+      script.src = 'https://cdn.emulatorjs.org/stable/data/loader.js';
+      document.body.appendChild(script);
+    }
+
+    // Loads GeForce NOW in iframe
+    function loadCloud() {
+      document.getElementById('game-box').innerHTML = 
+        `<iframe src="https://play.geforcenow.com" allow="gamepad; autoplay; fullscreen"></iframe>`;
+    }
+  </script>
+</body>
+</html>
