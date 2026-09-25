@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arcade Hub</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0f0f13;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        header {
+            width: 100%;
+            padding: 15px;
+            background-color: #1a1a24;
+            text-align: center;
+            border-bottom: 2px solid #00ffcc;
+        }
+        h1 {
+            margin: 0;
+            color: #00ffcc;
+            font-size: 1.8rem;
+        }
+        .nav-buttons {
+            margin: 15px 0;
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            background-color: #2a2a3a;
+            color: #00ffcc;
+            border: 1px solid #00ffcc;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #00ffcc;
+            color: #000000;
+        }
+        #viewport {
+            width: 90%;
+            max-width: 900px;
+            height: 600px;
+            border: 2px solid #33334d;
+            border-radius: 8px;
+            background-color: #000000;
+            position: relative;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Arcade & Emulator Hub</h1>
+    </header>
+
+    <div class="nav-buttons">
+        <button onclick="loadGame('webgl')">Browser Game</button>
+        <button onclick="loadGame('gba')">GBA Emulator</button>
+    </div>
+
+    <div id="viewport">
+        <div id="game"></div>
+    </div>
+
+    <script>
+        function loadGame(type) {
+            const container = document.getElementById('game');
+            container.innerHTML = '';
+
+            if (type === 'webgl') {
+                container.innerHTML = '<iframe src="https://play.gamenora.com" allowgamepad allowfullscreen></iframe>';
+            } else if (type === 'gba') {
+                window.EJS_player = '#game';
+                window.EJS_core = 'gba';
+                window.EJS_gameUrl = ''; // Paste direct link to a .gba ROM file here
+                window.EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
+
+                const script = document.createElement('script');
+                script.src = 'https://cdn.emulatorjs.org/stable/data/loader.js';
+                document.body.appendChild(script);
+            }
+        }
+
+        // Load default on start
+        loadGame('webgl');
+    </script>
+
+</body>
+</html>
