@@ -3,91 +3,293 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arcade Hub</title>
+    <title>Arcade Dashboard & Custom OS</title>
     <style>
-        body {
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            background-color: #0f0f13;
-            color: #ffffff;
-            font-family: Arial, sans-serif;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000;
+            color: #fff;
+            overflow: hidden;
+            height: 100vh;
+            user-select: none;
+        }
+
+        /* PS4 Dynamic Background Layer */
+        #bg-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.35) blur(3px);
+            transition: background-image 0.4s ease-in-out;
+            z-index: 1;
+        }
+
+        /* Dashboard UI */
+        .dashboard {
+            position: relative;
+            z-index: 2;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 40px;
+        }
+
+        .header-info h1 {
+            font-size: 2rem;
+            color: #00ffcc;
+            text-shadow: 0 0 12px rgba(0,255,204,0.6);
+            letter-spacing: 1px;
+        }
+
+        .game-title {
+            font-size: 2.8rem;
+            font-weight: bold;
+            text-shadow: 0 0 15px rgba(0,255,204,0.5);
+            margin-bottom: 10px;
+        }
+
+        /* PS4 Carousel Navigation */
+        .carousel {
+            display: flex;
+            gap: 25px;
+            overflow-x: auto;
+            padding: 20px 0;
+            z-index: 2;
+        }
+        .carousel::-webkit-scrollbar { display: none; }
+
+        .card {
+            min-width: 170px;
+            height: 230px;
+            background-color: #1a1a24;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
-        }
-        header {
-            width: 100%;
+            justify-content: flex-end;
             padding: 15px;
-            background-color: #1a1a24;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .card:hover {
+            transform: scale(1.08);
+            border-color: #00ffcc;
+            box-shadow: 0 0 20px #00ffcc;
+        }
+
+        .card span {
+            background: rgba(0, 0, 0, 0.85);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.85rem;
             text-align: center;
-            border-bottom: 2px solid #00ffcc;
+            width: 100%;
         }
-        h1 {
-            margin: 0;
+
+        /* Floating Custom Browser Window */
+        .window {
+            position: absolute;
+            top: 8%;
+            left: 12%;
+            width: 76vw;
+            height: 80vh;
+            background: #11111b;
+            border: 2px solid #00ffcc;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(0, 255, 204, 0.35);
+            display: none;
+            flex-direction: column;
+            z-index: 100;
+            resize: both;
+            overflow: hidden;
+            min-width: 450px;
+            min-height: 320px;
+        }
+
+        .window-header {
+            background: #1a1a24;
+            padding: 12px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: move;
+            border-bottom: 1px solid #333;
+        }
+
+        .window-title {
+            font-weight: bold;
             color: #00ffcc;
-            font-size: 1.8rem;
+            font-size: 1.1rem;
         }
-        .nav-buttons {
-            margin: 15px 0;
+
+        .window-controls button {
+            background: none;
+            border: none;
+            color: #ff5555;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 0 5px;
+        }
+
+        /* Address Bar Controls inside Window */
+        .browser-bar {
             display: flex;
             gap: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
+            padding: 10px;
+            background: #222230;
         }
-        button {
-            background-color: #2a2a3a;
-            color: #00ffcc;
-            border: 1px solid #00ffcc;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
+
+        .browser-bar input {
+            flex: 1;
+            padding: 8px 14px;
+            border-radius: 4px;
+            border: 1px solid #444;
+            background: #0f0f15;
+            color: #fff;
+            outline: none;
+        }
+
+        .browser-bar button {
+            background: #00ffcc;
+            color: #000;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 4px;
             font-weight: bold;
+            cursor: pointer;
         }
-        button:hover {
-            background-color: #00ffcc;
-            color: #000000;
-        }
-        #viewport {
-            width: 90%;
-            max-width: 900px;
-            height: 600px;
-            border: 2px solid #33334d;
-            border-radius: 8px;
-            background-color: #000000;
-            position: relative;
+
+        .window-content {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #000;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Arcade & Retro Hub</h1>
-    </header>
+    <!-- Ambient Dashboard Audio -->
+    <audio id="bg-music" loop autoplay>
+        <source src="https://files.catbox.moe/AUDIO_FILE_LINK_HERE.mp3" type="audio/mpeg">
+    </audio>
 
-    <div class="nav-buttons">
-        <button onclick="loadWebGame('https://html5.gamedistribution.com/rvvAS300/a31c360b947c4333b28b7e6ee57a7e3d/')">HTML5 Game</button>
-        <button onclick="loadROM('https://files.catbox.moe/gvd73l.z64', 'n64')">N64 Game 1</button>
-        <button onclick="loadROM('https://files.catbox.moe/y3zvb0.z64', 'n64')">N64 Game 2</button>
+    <!-- Dynamic Wallpaper Layer -->
+    <div id="bg-layer"></div>
+
+    <div class="dashboard">
+        <div class="header-info">
+            <h1>ARCADE OS</h1>
+        </div>
+
+        <div class="main-details">
+            <div class="game-title" id="active-title">Select an App or Game</div>
+        </div>
+
+        <!-- PS4 Carousel Navigation Menu -->
+        <div class="carousel">
+            <!-- Custom Web Browser App -->
+            <div class="card" 
+                 style="background-image: url('https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=400&q=80');"
+                 onmouseenter="previewGame('Custom Web Browser', 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1280&q=80')"
+                 onclick="openWebBrowser('https://html5.gamedistribution.com/rvvAS300/a31c360b947c4333b28b7e6ee57a7e3d/', 'Custom Browser')">
+                <span>Custom Browser</span>
+            </div>
+
+            <!-- N64 Title 1 -->
+            <div class="card" 
+                 style="background-image: url('https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?auto=format&fit=crop&w=400&q=80');"
+                 onmouseenter="previewGame('The Legend of Zelda: Ocarina of Time', 'https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?auto=format&fit=crop&w=1280&q=80')"
+                 onclick="openEmulator('https://files.catbox.moe/gvd73l.z64', 'n64', 'The Legend of Zelda: Ocarina of Time')">
+                <span>Zelda: Ocarina of Time</span>
+            </div>
+
+            <!-- N64 Title 2 -->
+            <div class="card" 
+                 style="background-image: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=400&q=80');"
+                 onmouseenter="previewGame('Super Mario 64', 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1280&q=80')"
+                 onclick="openEmulator('https://files.catbox.moe/y3zvb0.z64', 'n64', 'Super Mario 64')">
+                <span>Super Mario 64</span>
+            </div>
+        </div>
     </div>
 
-    <div id="viewport">
-        <div id="game" style="width:100%; height:100%;"></div>
+    <!-- Draggable Custom Browser / Game Window -->
+    <div class="window" id="app-window">
+        <div class="window-header" id="window-drag-handle">
+            <span class="window-title" id="win-title">Browser</span>
+            <div class="window-controls">
+                <button onclick="closeWindow()">✕</button>
+            </div>
+        </div>
+        <div class="browser-bar" id="url-bar-container" style="display:none;">
+            <input type="text" id="url-input" placeholder="Enter web URL...">
+            <button onclick="navigateBrowser()">Go</button>
+        </div>
+        <div id="win-body" style="width:100%; height:100%;"></div>
     </div>
 
     <script>
-        function loadWebGame(url) {
-            const container = document.getElementById('game');
-            container.innerHTML = `<iframe src="${url}" style="width:100%; height:100%; border:none;" allowgamepad allowfullscreen></iframe>`;
+        const appWindow = document.getElementById('app-window');
+        const winTitle = document.getElementById('win-title');
+        const winBody = document.getElementById('win-body');
+        const urlBarContainer = document.getElementById('url-bar-container');
+        const urlInput = document.getElementById('url-input');
+        const bgAudio = document.getElementById('bg-music');
+
+        dragElement(appWindow);
+
+        function previewGame(title, bgUrl) {
+            document.getElementById('active-title').innerText = title;
+            document.getElementById('bg-layer').style.backgroundImage = `url('${bgUrl}')`;
         }
 
-        function loadROM(romUrl, system) {
-            const container = document.getElementById('game');
-            container.innerHTML = '';
+        function openWebBrowser(url, title) {
+            bgAudio.pause();
+            winTitle.innerText = title || "Custom Browser";
+            urlBarContainer.style.display = "flex";
+            urlInput.value = url;
+            winBody.innerHTML = `<iframe src="${url}" class="window-content" allowfullscreen allowgamepad></iframe>`;
+            appWindow.style.display = "flex";
+        }
 
-            window.EJS_player = '#game';
-            window.EJS_core = system; // 'n64', 'gba', 'nds', 'nes', 'snes'
-            window.EJS_gameUrl = romUrl;
+        function navigateBrowser() {
+            let url = urlInput.value;
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'https://' + url;
+            }
+            winBody.innerHTML = `<iframe src="${url}" class="window-content" allowfullscreen allowgamepad></iframe>`;
+        }
+
+        function openEmulator(romUrl, system, title) {
+            bgAudio.pause();
+            winTitle.innerText = title || "Emulator";
+            urlBarContainer.style.display = "none";
+            winBody.innerHTML = '<div id="emu-container" style="width:100%; height:100%;"></div>';
+            appWindow.style.display = "flex";
+
+            const proxiedUrl = 'https://corsproxy.io/?' + encodeURIComponent(romUrl);
+
+            window.EJS_player = '#emu-container';
+            window.EJS_core = system;
+            window.EJS_gameUrl = proxiedUrl;
             window.EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
 
             const script = document.createElement('script');
@@ -95,9 +297,47 @@
             document.body.appendChild(script);
         }
 
-        // Default start game (loads first N64 game on page load)
-        loadROM('https://files.catbox.moe/gvd73l.z64', 'n64');
-    </script>
+        function closeWindow() {
+            appWindow.style.display = "none";
+            winBody.innerHTML = "";
+            bgAudio.play();
+        }
 
+        function dragElement(elmnt) {
+            var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            const header = document.getElementById("window-drag-handle");
+            if (header) {
+                header.onmousedown = dragMouseDown;
+            }
+
+            function dragMouseDown(e) {
+                e = e || window.event;
+                e.preventDefault();
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+            }
+
+            function elementDrag(e) {
+                e = e || window.event;
+                e.preventDefault();
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+                elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+            }
+
+            function closeDragElement() {
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
+
+        // Set default startup preview
+        previewGame('Custom Web Browser', 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1280&q=80');
+    </script>
 </body>
 </html>
