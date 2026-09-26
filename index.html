@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arcade Dashboard & Custom OS</title>
+    <title>Arcade OS | Unblocked Hub</title>
     <style>
         * {
             box-sizing: border-box;
@@ -19,7 +19,6 @@
             user-select: none;
         }
 
-        /* Dynamic Background Layer */
         #bg-layer {
             position: fixed;
             top: 0;
@@ -33,7 +32,6 @@
             z-index: 1;
         }
 
-        /* Dashboard UI */
         .dashboard {
             position: relative;
             z-index: 2;
@@ -66,7 +64,6 @@
             font-weight: bold;
         }
 
-        /* Custom Build Banner */
         .custom-banner {
             background: rgba(22, 27, 34, 0.85);
             border: 1px dashed #00ffcc;
@@ -102,7 +99,6 @@
             margin-bottom: 5px;
         }
 
-        /* PS4 Carousel Navigation */
         .carousel {
             display: flex;
             gap: 20px;
@@ -145,7 +141,6 @@
             width: 100%;
         }
 
-        /* Draggable Window */
         .window {
             position: absolute;
             top: 8%;
@@ -190,7 +185,6 @@
             cursor: pointer;
         }
 
-        /* Address Bar Controls */
         .browser-bar {
             display: flex;
             gap: 10px;
@@ -229,25 +223,22 @@
 </head>
 <body>
 
-    <!-- Ambient Dashboard Audio -->
     <audio id="bg-music" loop autoplay>
         <source src="https://archive.org/download/ResidentEvilOriginalSoundtrack/01%20-%20Main%20Title.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Dynamic Background Layer -->
     <div id="bg-layer"></div>
 
     <div class="dashboard">
         <div>
             <div class="header-info">
                 <h1>ARCADE OS</h1>
-                <span class="badge-free">100% FREE ACCESS</span>
+                <span class="badge-free">100% UNBLOCKED</span>
             </div>
 
-            <!-- Custom Setup Commission Box -->
             <div class="custom-banner">
-                <p><strong>Want your own custom site layout?</strong> Talk to me in person and I can code a personalized dashboard with custom themes for a snack or money!</p>
-                <button class="custom-btn" onclick="alert('Talk to me in person to set up your own custom coded dashboard!')">Request Custom OS</button>
+                <p><strong>Want your own custom site layout?</strong> Talk to me in person and I can code a personalized dashboard for a snack or money!</p>
+                <button class="custom-btn" onclick="alert('Talk to me in person to set up your custom layout!')">Request Custom OS</button>
             </div>
         </div>
 
@@ -255,33 +246,32 @@
             <div class="game-title" id="active-title">The Legend of Zelda: Ocarina of Time</div>
         </div>
 
-        <!-- PS4 Carousel Menu -->
         <div class="carousel">
-            <!-- Zelda: Ocarina of Time -->
+            <!-- Zelda OOT (Embed Friendly Engine) -->
             <div class="card" 
                  style="background-image: url('https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?auto=format&fit=crop&w=400&q=80');"
                  onmouseenter="previewGame('The Legend of Zelda: Ocarina of Time', 'https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?auto=format&fit=crop&w=1280&q=80')"
-                 onclick="openDirectGame('https://html5.gamedistribution.com/rvvAS300/a31c360b947c4333b28b7e6ee57a7e3d/', 'Zelda: Ocarina of Time')">
+                 onclick="openDirectGame('https://emulatoronline.com/n64-games/legend-of-zelda-ocarina-of-time/', 'Zelda: Ocarina of Time')">
                 <span>Zelda: Ocarina of Time</span>
             </div>
 
-            <!-- COD Zombies (Demake) -->
+            <!-- COD Zombies WebGL Port -->
             <div class="card" 
                  style="background-image: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&q=80');"
-                 onmouseenter="previewGame('COD Zombies (Demake)', 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1280&q=80')"
-                 onclick="openDirectGame('https://www.gameflare.com/embed/call-of-duty-zombies-demake/', 'COD Zombies')">
+                 onmouseenter="previewGame('COD Zombies WebGL', 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1280&q=80')"
+                 onclick="openDirectGame('https://html5.gamedistribution.com/rvvAS300/a31c360b947c4333b28b7e6ee57a7e3d/', 'COD Zombies WebGL')">
                 <span>COD Zombies</span>
             </div>
 
-            <!-- Pixel Combat FPS -->
+            <!-- Pixel Shooter FPS -->
             <div class="card" 
                  style="background-image: url('https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=400&q=80');"
-                 onmouseenter="previewGame('Pixel Combat FPS', 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=1280&q=80')"
-                 onclick="openDirectGame('https://vseigru.net/iframe/pixel-gun-3d/', 'Pixel Combat FPS')">
-                <span>Pixel Combat FPS</span>
+                 onmouseenter="previewGame('Pixel Gun 3D FPS', 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=1280&q=80')"
+                 onclick="openDirectGame('https://scratch.mit.edu/projects/10128407/embed', 'Pixel Gun 3D FPS')">
+                <span>Pixel Shooter FPS</span>
             </div>
 
-            <!-- Cuphead -->
+            <!-- Cuphead Port -->
             <div class="card" 
                  style="background-image: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=400&q=80');"
                  onmouseenter="previewGame('Cuphead', 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1280&q=80')"
@@ -289,7 +279,7 @@
                 <span>Cuphead</span>
             </div>
 
-            <!-- Super Mario 64 -->
+            <!-- Super Mario 64 WebGL -->
             <div class="card" 
                  style="background-image: url('https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=400&q=80');"
                  onmouseenter="previewGame('Super Mario 64', 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=1280&q=80')"
@@ -297,11 +287,11 @@
                 <span>Super Mario 64</span>
             </div>
 
-            <!-- Custom Web Browser -->
+            <!-- Unblocked DuckDuckGo Search -->
             <div class="card" 
                  style="background-image: url('https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=400&q=80');"
                  onmouseenter="previewGame('Custom Web Browser', 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1280&q=80')"
-                 onclick="openWebBrowser('https://www.bing.com', 'Custom Web Browser')">
+                 onclick="openWebBrowser('https://html.duckduckgo.com/html/', 'Custom Browser')">
                 <span>Custom Browser</span>
             </div>
         </div>
@@ -341,7 +331,7 @@
             bgAudio.pause();
             winTitle.innerText = title;
             urlBarContainer.style.display = "none";
-            winBody.innerHTML = `<iframe src="${url}" class="window-content" allowfullscreen allowgamepad></iframe>`;
+            winBody.innerHTML = `<iframe src="${url}" class="window-content" allowfullscreen allowgamepad sandbox="allow-scripts allow-same-origin allow-forms"></iframe>`;
             appWindow.style.display = "flex";
         }
 
@@ -350,7 +340,7 @@
             winTitle.innerText = title || "Custom Web Browser";
             urlBarContainer.style.display = "flex";
             urlInput.value = url;
-            winBody.innerHTML = `<iframe src="${url}" class="window-content" allowfullscreen allowgamepad></iframe>`;
+            winBody.innerHTML = `<iframe src="${url}" class="window-content" allowfullscreen allowgamepad sandbox="allow-scripts allow-same-origin allow-forms"></iframe>`;
             appWindow.style.display = "flex";
         }
 
@@ -364,10 +354,10 @@
             } else if (input.includes('.') && !input.includes(' ')) {
                 targetUrl = 'https://' + input;
             } else {
-                targetUrl = 'https://www.bing.com/search?q=' + encodeURIComponent(input);
+                targetUrl = 'https://html.duckduckgo.com/html/?q=' + encodeURIComponent(input);
             }
 
-            winBody.innerHTML = `<iframe src="${targetUrl}" class="window-content" allowfullscreen allowgamepad></iframe>`;
+            winBody.innerHTML = `<iframe src="${targetUrl}" class="window-content" allowfullscreen allowgamepad sandbox="allow-scripts allow-same-origin allow-forms"></iframe>`;
         }
 
         function closeWindow() {
@@ -409,7 +399,6 @@
             }
         }
 
-        // Set default background preview on load
         previewGame('The Legend of Zelda: Ocarina of Time', 'https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?auto=format&fit=crop&w=1280&q=80');
     </script>
 </body>
