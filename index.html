@@ -1,576 +1,173 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arcade OS | Offline Unblocked Hub</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #000;
-            color: #fff;
-            overflow: hidden;
-            height: 100vh;
-            user-select: none;
-        }
+<script>
+    const appWindow = document.getElementById('app-window');
+    const winTitle = document.getElementById('win-title');
+    const winBody = document.getElementById('win-body');
+    const urlBarContainer = document.getElementById('url-bar-container');
+    const urlInput = document.getElementById('url-input');
+    const titleEl = document.getElementById('active-title');
 
-        /* Dynamic Background Layer */
-        #bg-layer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-size: cover;
-            background-position: center;
-            filter: brightness(0.35) blur(3px);
-            transition: background-image 0.4s ease-in-out;
-            z-index: 1;
-        }
+    dragElement(appWindow);
 
-        /* Dashboard UI */
-        .dashboard {
-            position: relative;
-            z-index: 2;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 30px 40px;
-        }
+    function previewGame(title, bgUrl) {
+        titleEl.classList.remove('animated');
+        void titleEl.offsetWidth;
+        titleEl.innerText = title;
+        titleEl.classList.add('animated');
+        document.getElementById('bg-layer').style.backgroundImage = `url('${bgUrl}')`;
+    }
 
-        .header-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .header-info h1 {
-            font-size: 2rem;
-            color: #00ffcc;
-            text-shadow: 0 0 12px rgba(0,255,204,0.6);
-            letter-spacing: 1px;
-        }
-
-        .badge-free {
-            background-color: #00ffcc;
-            color: #000;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-weight: bold;
-        }
-
-        /* Custom Build Banner */
-        .custom-banner {
-            background: rgba(22, 27, 34, 0.85);
-            border: 1px dashed #00ffcc;
-            padding: 12px 20px;
-            border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 15px;
-            backdrop-filter: blur(5px);
-        }
-
-        .custom-banner p {
-            margin: 0;
-            font-size: 0.9rem;
-            color: #ccc;
-        }
-
-        .custom-btn {
-            background: #00ffcc;
-            color: #000;
-            border: none;
-            padding: 8px 14px;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        /* Animated Title Header */
-        .game-title {
-            font-size: 2.8rem;
-            font-weight: bold;
-            text-shadow: 0 0 15px rgba(0,255,204,0.5);
-            margin-bottom: 5px;
-            transition: transform 0.3s ease, color 0.3s ease, text-shadow 0.3s ease;
-            display: inline-block;
-        }
-
-        .game-title.animated {
-            animation: textGlow 0.4s ease-out forwards;
-        }
-
-        @keyframes textGlow {
-            0% { transform: scale(0.95); opacity: 0.7; }
-            50% { transform: scale(1.05); color: #00ffcc; text-shadow: 0 0 25px rgba(0,255,204,0.9); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        /* PS4 Carousel Navigation */
-        .carousel {
-            display: flex;
-            gap: 20px;
-            overflow-x: auto;
-            padding: 15px 0;
-            z-index: 2;
-        }
-        .carousel::-webkit-scrollbar { display: none; }
-
-        /* Animated Game Cards */
-        .card {
-            min-width: 170px;
-            height: 230px;
-            background-color: #1a1a24;
-            border: 2px solid transparent;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-end;
-            padding: 12px;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.9) 100%);
-            transition: opacity 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-10px) scale(1.06);
-            border-color: #00ffcc;
-            box-shadow: 0 0 25px rgba(0, 255, 204, 0.7);
-            animation: cardPulse 1.5s infinite alternate;
-        }
-
-        @keyframes cardPulse {
-            0% { box-shadow: 0 0 15px rgba(0, 255, 204, 0.5); }
-            100% { box-shadow: 0 0 30px rgba(0, 255, 204, 0.9); }
-        }
-
-        .card span {
-            position: relative;
-            z-index: 2;
-            background: rgba(0, 0, 0, 0.85);
-            padding: 8px 10px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 0.85rem;
-            text-align: center;
-            width: 100%;
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
-        }
-
-        .card:hover span {
-            transform: translateY(-2px);
-            background-color: #00ffcc;
-            color: #000;
-            border-color: #00ffcc;
-            font-weight: 800;
-        }
-
-        /* Draggable App Window */
-        .window {
-            position: absolute;
-            top: 8%;
-            left: 12%;
-            width: 76vw;
-            height: 80vh;
-            background: #11111b;
-            border: 2px solid #00ffcc;
-            border-radius: 10px;
-            box-shadow: 0 0 30px rgba(0, 255, 204, 0.35);
-            display: none;
-            flex-direction: column;
-            z-index: 100;
-            resize: both;
-            overflow: hidden;
-            min-width: 450px;
-            min-height: 320px;
-        }
-
-        .window-header {
-            background: #1a1a24;
-            padding: 10px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: move;
-            border-bottom: 1px solid #333;
-        }
-
-        .window-title {
-            font-weight: bold;
-            color: #00ffcc;
-            font-size: 1rem;
-        }
-
-        .window-controls button {
-            background: none;
-            border: none;
-            color: #ff5555;
-            font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .browser-bar {
-            display: flex;
-            gap: 10px;
-            padding: 8px 12px;
-            background: #222230;
-        }
-
-        .browser-bar input {
-            flex: 1;
-            padding: 6px 12px;
-            border-radius: 4px;
-            border: 1px solid #444;
-            background: #0f0f15;
-            color: #fff;
-            outline: none;
-        }
-
-        .browser-bar button {
-            background: #00ffcc;
-            color: #000;
-            border: none;
-            padding: 6px 14px;
-            border-radius: 4px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .window-content {
-            flex: 1;
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: #000;
-        }
-
-        /* ROM Launcher Interface */
-        .rom-picker-ui {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            padding: 20px;
-            text-align: center;
-            background: #0a0a0f;
-        }
-
-        .rom-picker-ui h2 {
-            color: #00ffcc;
-            margin-bottom: 8px;
-        }
-
-        .rom-picker-ui p {
-            color: #aaa;
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-        }
-
-        .file-btn {
-            padding: 12px 20px;
-            background: #1a1a24;
-            border: 2px solid #00ffcc;
-            border-radius: 8px;
-            color: #fff;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .file-btn:hover {
-            background: #00ffcc;
-            color: #000;
-        }
-
-        canvas {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
-    </style>
-</head>
-<body>
-
-    <div id="bg-layer"></div>
-
-    <div class="dashboard">
-        <div>
-            <div class="header-info">
-                <h1>ARCADE OS</h1>
-                <span class="badge-free">100% LOCAL / UNBLOCKED</span>
-            </div>
-
-            <div class="custom-banner">
-                <p><strong>Want your own custom site layout?</strong> Talk to me in person and I can code a personalized dashboard for a snack or money!</p>
-                <button class="custom-btn" onclick="alert('Talk to me in person to set up your custom layout!')">Request Custom OS</button>
-            </div>
-        </div>
-
-        <div class="main-details">
-            <div class="game-title" id="active-title">The Legend of Zelda: Ocarina of Time</div>
-        </div>
-
-        <div class="carousel">
-            <!-- Zelda: Ocarina of Time -->
-            <div class="card" 
-                 style="background-image: url('https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?auto=format&fit=crop&w=400&q=80');"
-                 onmouseenter="previewGame('The Legend of Zelda: Ocarina of Time', 'https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?auto=format&fit=crop&w=1280&q=80')"
-                 onclick="launchRomEmulator('Zelda: Ocarina of Time')">
-                <span>Zelda: Ocarina of Time</span>
-            </div>
-
-            <!-- Zelda: Majora's Mask 64 -->
-            <div class="card" 
-                 style="background-image: url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=400&q=80');"
-                 onmouseenter="previewGame('The Legend of Zelda: Majora\'s Mask 64', 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1280&q=80')"
-                 onclick="launchRomEmulator('Zelda: Majora\'s Mask 64')">
-                <span>Zelda: Majora's Mask 64</span>
-            </div>
-
-            <!-- Eaglercraft -->
-            <div class="card" 
-                 style="background-image: url('https://images.unsplash.com/photo-1627856013091-fed6e4e30025?auto=format&fit=crop&w=400&q=80');"
-                 onmouseenter="previewGame('Eaglercraft (Minecraft Local)', 'https://images.unsplash.com/photo-1627856013091-fed6e4e30025?auto=format&fit=crop&w=1280&q=80')"
-                 onclick="launchDataApp('Eaglercraft', 'Minecraft HTML5 Engine Loaded Locally')">
-                <span>Eaglercraft</span>
-            </div>
-
-            <!-- FNAF: Security Breach -->
-            <div class="card" 
-                 style="background-image: url('https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=400&q=80');"
-                 onmouseenter="previewGame('FNAF: Security Breach', 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=1280&q=80')"
-                 onclick="launchDataApp('FNAF: Security Breach', 'Free Roam Engine Loaded Locally')">
-                <span>FNAF: Security Breach</span>
-            </div>
-
-            <!-- Cuphead -->
-            <div class="card" 
-                 style="background-image: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=400&q=80');"
-                 onmouseenter="previewGame('Cuphead HTML5 Port', 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1280&q=80')"
-                 onclick="launchDataApp('Cuphead', 'WebGL Game Engine Loaded Locally')">
-                <span>Cuphead</span>
-            </div>
-
-            <!-- COD Zombies -->
-            <div class="card" 
-                 style="background-image: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&q=80');"
-                 onmouseenter="previewGame('COD Zombies', 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1280&q=80')"
-                 onclick="launchDataApp('COD Zombies', '3D Zombies Engine Loaded Locally')">
-                <span>COD Zombies</span>
-            </div>
-
-            <!-- Custom Web Browser -->
-            <div class="card" 
-                 style="background-image: url('https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=400&q=80');"
-                 onmouseenter="previewGame('Custom Web Browser', 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1280&q=80')"
-                 onclick="openWebBrowser('Custom Browser')">
-                <span>Custom Browser</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- App Window -->
-    <div class="window" id="app-window">
-        <div class="window-header" id="window-drag-handle">
-            <span class="window-title" id="win-title">Browser</span>
-            <div class="window-controls">
-                <button onclick="closeWindow()">✕</button>
-            </div>
-        </div>
-        <div class="browser-bar" id="url-bar-container" style="display:none;">
-            <input type="text" id="url-input" placeholder="Enter URL or search query...">
-            <button onclick="navigateBrowser()">Go</button>
-        </div>
-        <div id="win-body" style="width:100%; height:100%;"></div>
-    </div>
-
-    <script>
-        const appWindow = document.getElementById('app-window');
-        const winTitle = document.getElementById('win-title');
-        const winBody = document.getElementById('win-body');
-        const urlBarContainer = document.getElementById('url-bar-container');
-        const urlInput = document.getElementById('url-input');
-        const titleEl = document.getElementById('active-title');
-
-        dragElement(appWindow);
-
-        function previewGame(title, bgUrl) {
-            titleEl.classList.remove('animated');
-            void titleEl.offsetWidth;
-            titleEl.innerText = title;
-            titleEl.classList.add('animated');
-            document.getElementById('bg-layer').style.backgroundImage = `url('${bgUrl}')`;
-        }
-
-        /* Pure HTML Data URL Launcher - Bypasses External Blockers */
-        function launchDataApp(title, subtitle) {
-            winTitle.innerText = title;
-            urlBarContainer.style.display = "none";
-            
-            const localHtml = `
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <style>
-                        body { background: #0d0d13; color: #00ffcc; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; text-align: center; }
-                        h2 { font-size: 2rem; margin-bottom: 10px; }
-                        p { color: #aaa; margin-bottom: 20px; }
-                        .play-btn { background: #00ffcc; color: #000; border: none; padding: 12px 24px; font-weight: bold; border-radius: 6px; cursor: pointer; font-size: 1rem; }
-                    </style>
-                </head>
-                <body>
-                    <h2>${title}</h2>
-                    <p>${subtitle}</p>
-                    <button class="play-btn" onclick="alert('Game payload running in local browser frame.')">Start Game Engine</button>
-                </body>
-                </html>
+    /* Fixed Launcher - Replaces launcher UI with actual game frame upon click */
+    function launchDataApp(title, subtitle, gameUrl) {
+        winTitle.innerText = title;
+        urlBarContainer.style.display = "none";
+        
+        // If a direct URL/path is passed, embed it directly into the window
+        if (gameUrl) {
+            winBody.innerHTML = `<iframe src="${gameUrl}" class="window-content" allow="fullscreen; autoplay" sandbox="allow-scripts allow-same-origin allow-pointer-lock"></iframe>`;
+        } else {
+            // Default launcher screen that loads the target game frame on click
+            winBody.innerHTML = `
+                <div style="background: #0d0d13; color: #00ffcc; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; margin: 0; text-align: center;">
+                    <h2 style="font-size: 2rem; margin-bottom: 10px;">${title}</h2>
+                    <p style="color: #aaa; margin-bottom: 20px;">${subtitle}</p>
+                    <button class="custom-btn" style="padding: 12px 24px; font-size: 1rem;" onclick="loadGameFrame('${title}')">Start Game Engine</button>
+                </div>
             `;
-
-            const blob = new Blob([localHtml], { type: 'text/html' });
-            const blobUrl = URL.createObjectURL(blob);
-            winBody.innerHTML = `<iframe src="${blobUrl}" class="window-content"></iframe>`;
-            appWindow.style.display = "flex";
         }
+        appWindow.style.display = "flex";
+    }
 
-        function openWebBrowser(title) {
-            winTitle.innerText = title || "Custom Web Browser";
-            urlBarContainer.style.display = "flex";
-            urlInput.value = "";
-            navigateBrowser();
-            appWindow.style.display = "flex";
+    function loadGameFrame(title) {
+        // Map your app titles to their actual HTML files or repo paths
+        const gamePaths = {
+            'Eaglercraft': './eaglercraft/index.html', // Change to your local Eaglercraft path or URL
+            'FNAF: Security Breach': './fnaf/index.html',
+            'Cuphead': './cuphead/index.html',
+            'COD Zombies': './cod/index.html'
+        };
+
+        const path = gamePaths[title];
+
+        if (path) {
+            winBody.innerHTML = `<iframe src="${path}" class="window-content" allow="fullscreen; autoplay" sandbox="allow-scripts allow-same-origin allow-pointer-lock"></iframe>`;
+        } else {
+            alert('Game path not configured yet! Set the correct relative file path in loadGameFrame().');
         }
+    }
 
-        function navigateBrowser() {
-            let input = urlInput.value.trim();
-            let htmlContent = "";
+    function openWebBrowser(title) {
+        winTitle.innerText = title || "Custom Web Browser";
+        urlBarContainer.style.display = "flex";
+        urlInput.value = "";
+        navigateBrowser();
+        appWindow.style.display = "flex";
+    }
 
-            if (!input) {
-                htmlContent = `
-                    <body style="background:#111;color:#fff;font-family:sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;margin:0;">
-                        <h2 style="color:#00ffcc;">Arcade OS Private Search</h2>
-                        <p style="color:#888;">Type a URL or term above to browse directly inside the app frame.</p>
-                    </body>
-                `;
-            } else {
-                let targetUrl = input.startsWith('http') ? input : 'https://' + input;
-                htmlContent = `<iframe src="${targetUrl}" style="width:100%;height:100%;border:none;"></iframe>`;
-            }
+    function navigateBrowser() {
+        let input = urlInput.value.trim();
+        let htmlContent = "";
 
+        if (!input) {
+            htmlContent = `
+                <body style="background:#111;color:#fff;font-family:sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;margin:0;">
+                    <h2 style="color:#00ffcc;">Arcade OS Private Search</h2>
+                    <p style="color:#888;">Type a URL or term above to browse directly inside the app frame.</p>
+                </body>
+            `;
             const blob = new Blob([htmlContent], { type: 'text/html' });
             winBody.innerHTML = `<iframe src="${URL.createObjectURL(blob)}" class="window-content"></iframe>`;
+        } else {
+            let targetUrl = input.startsWith('http') ? input : 'https://' + input;
+            winBody.innerHTML = `<iframe src="${targetUrl}" class="window-content" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>`;
+        }
+    }
+
+    /* Pure Offline Canvas ROM Reader for N64 */
+    function launchRomEmulator(gameName) {
+        winTitle.innerText = gameName;
+        urlBarContainer.style.display = "none";
+
+        winBody.innerHTML = `
+            <div class="rom-picker-ui" id="rom-setup">
+                <h2>${gameName}</h2>
+                <p>Select your local <b>.n64</b> or <b>.z64</b> file to load into memory:</p>
+                <input type="file" id="rom-file-input" accept=".n64,.z64,.v64" class="file-btn">
+            </div>
+            <div id="emulator-container" style="width:100%; height:100%; display:none; background:#000;">
+                <canvas id="n64-canvas"></canvas>
+            </div>
+        `;
+
+        appWindow.style.display = "flex";
+
+        document.getElementById('rom-file-input').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            document.getElementById('rom-setup').style.display = 'none';
+            document.getElementById('emulator-container').style.display = 'block';
+
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                const arrayBuffer = evt.target.result;
+                const romData = new Uint8Array(arrayBuffer);
+                
+                const canvas = document.getElementById('n64-canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = window.innerWidth * 0.7;
+                canvas.height = window.innerHeight * 0.7;
+
+                ctx.fillStyle = "#000000";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = "#00ffcc";
+                ctx.font = "20px Segoe UI";
+                ctx.textAlign = "center";
+                ctx.fillText(`${gameName} ROM Loaded Successfully (${(romData.length / 1024 / 1024).toFixed(2)} MB)`, canvas.width / 2, canvas.height / 2 - 10);
+                ctx.fillStyle = "#aaaaaa";
+                ctx.font = "14px Segoe UI";
+                ctx.fillText("ROM binary verified in local buffer.", canvas.width / 2, canvas.height / 2 + 20);
+            };
+            reader.readAsArrayBuffer(file);
+        });
+    }
+
+    function closeWindow() {
+        appWindow.style.display = "none";
+        winBody.innerHTML = "";
+    }
+
+    function dragElement(elmnt) {
+        var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+        const header = document.getElementById("window-drag-handle");
+        if (header) {
+            header.onmousedown = dragMouseDown;
         }
 
-        /* Pure Offline Canvas ROM Reader for N64 */
-        function launchRomEmulator(gameName) {
-            winTitle.innerText = gameName;
-            urlBarContainer.style.display = "none";
-
-            winBody.innerHTML = `
-                <div class="rom-picker-ui" id="rom-setup">
-                    <h2>${gameName}</h2>
-                    <p>Select your local <b>.n64</b> or <b>.z64</b> file to load into memory:</p>
-                    <input type="file" id="rom-file-input" accept=".n64,.z64,.v64" class="file-btn">
-                </div>
-                <div id="emulator-container" style="width:100%; height:100%; display:none; background:#000;">
-                    <canvas id="n64-canvas"></canvas>
-                </div>
-            `;
-
-            appWindow.style.display = "flex";
-
-            document.getElementById('rom-file-input').addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (!file) return;
-
-                document.getElementById('rom-setup').style.display = 'none';
-                document.getElementById('emulator-container').style.display = 'block';
-
-                const reader = new FileReader();
-                reader.onload = function(evt) {
-                    const arrayBuffer = evt.target.result;
-                    const romData = new Uint8Array(arrayBuffer);
-                    
-                    // Direct local canvas initialization
-                    const canvas = document.getElementById('n64-canvas');
-                    const ctx = canvas.getContext('2d');
-                    canvas.width = window.innerWidth * 0.7;
-                    canvas.height = window.innerHeight * 0.7;
-
-                    ctx.fillStyle = "#000000";
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-                    ctx.fillStyle = "#00ffcc";
-                    ctx.font = "20px Segoe UI";
-                    ctx.textAlign = "center";
-                    ctx.fillText(`${gameName} ROM Loaded Successfully (${(romData.length / 1024 / 1024).toFixed(2)} MB)`, canvas.width / 2, canvas.height / 2 - 10);
-                    ctx.fillStyle = "#aaaaaa";
-                    ctx.font = "14px Segoe UI";
-                    ctx.fillText("ROM binary verified in local tablet buffer.", canvas.width / 2, canvas.height / 2 + 20);
-                };
-                reader.readAsArrayBuffer(file);
-            });
+        function dragMouseDown(e) {
+            e = e || window.event;
+            e.preventDefault();
+            pos3 = e.clientX;
+            pos4 = e.clientY; 
+            document.onmouseup = closeDragElement;
+            document.onmousemove = elementDrag;
         }
 
-        function closeWindow() {
-            appWindow.style.display = "none";
-            winBody.innerHTML = "";
+        function elementDrag(e) {
+            e = e || window.event;
+            e.preventDefault();
+            pos1 = pos3 - e.clientX;
+            pos2 = pos4 - e.clientY;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+            elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
         }
 
-        function dragElement(elmnt) {
-            var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-            const header = document.getElementById("window-drag-handle");
-            if (header) {
-                header.onmousedown = dragMouseDown;
-            }
-
-            function dragMouseDown(e) {
-                e = e || window.event;
-                e.preventDefault();
-                pos3 = e.clientX;
-                pos4 = e.clientY; document.onmouseup = closeDragElement;
-                document.onmousemove = elementDrag;
-            }
-
-            function elementDrag(e) {
-                e = e || window.event;
-                e.preventDefault();
-                pos1 = pos3 - e.clientX;
-                pos2 = pos4 - e.clientY;
-                pos3 = e.clientX;
-                pos4 = e.clientY;
-                elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-                elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-            }
-
-            function closeDragElement() {
-                document.onmouseup = null;
-                document.onmousemove = null;
-            }
+        function closeDragElement() {
+            document.onmouseup = null;
+            document.onmousemove = null;
         }
+    }
 
-        previewGame('The Legend of Zelda: Ocarina of Time', 'https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?auto=format&fit=crop&w=1280&q=80');
-    </script>
-</body>
-</html>
+    previewGame('The Legend of Zelda: Ocarina of Time', 'https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?auto=format&fit=crop&w=1280&q=80');
+</script>
