@@ -67,7 +67,8 @@
 
     <div class="nav-buttons">
         <button onclick="loadWebGame('https://html5.gamedistribution.com/rvvAS300/a31c360b947c4333b28b7e6ee57a7e3d/')">HTML5 Game</button>
-        <button onclick="loadROM('https://raw.githubusercontent.com/dwelch67/gba_samples/master/thumb/blinker01/blink.gba', 'gba')">GBA Sample Demo</button>
+        <button onclick="loadROM('https://files.catbox.moe/gvd73l.z64', 'n64')">N64 Game 1</button>
+        <button onclick="loadROM('https://files.catbox.moe/y3zvb0.z64', 'n64')">N64 Game 2</button>
     </div>
 
     <div id="viewport">
@@ -85,8 +86,8 @@
             container.innerHTML = '';
 
             window.EJS_player = '#game';
-            window.EJS_core = system; // 'gba', 'nds', 'n64', 'nes', 'snes'
-            window.EJS_gameUrl = romUrl; // Direct link ending in extension
+            window.EJS_core = system; // 'n64', 'gba', 'nds', 'nes', 'snes'
+            window.EJS_gameUrl = romUrl;
             window.EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
 
             const script = document.createElement('script');
@@ -94,8 +95,8 @@
             document.body.appendChild(script);
         }
 
-        // Default start game
-        loadWebGame('https://html5.gamedistribution.com/rvvAS300/a31c360b947c4333b28b7e6ee57a7e3d/');
+        // Default start game (loads first N64 game on page load)
+        loadROM('https://files.catbox.moe/gvd73l.z64', 'n64');
     </script>
 
 </body>
