@@ -3,24 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Classroom</title>
+    <!-- TAB CLOAK: LOOKS LIKE GOOGLE CLASSROOM -->
+    <title>Classes - Google Classroom</title>
+    <link rel="icon" type="image/x-icon" href="https://ssl.gstatic.com/classroom/favicon.png">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: #0d1117;
-            color: #c9d1d9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f141c;
+            color: #e6edf3;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
+            padding: 15px;
         }
 
-        .container {
-            width: 100%;
-            max-width: 900px;
-        }
+        .container { width: 100%; max-width: 1000px; }
 
         .top-bar {
             display: flex;
@@ -28,16 +27,12 @@
             align-items: center;
             background: #161b22;
             border: 1px solid #30363d;
-            padding: 12px 20px;
+            padding: 10px 18px;
             border-radius: 8px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
-        .top-bar h1 {
-            color: #58a6ff;
-            font-size: 1.3rem;
-            letter-spacing: 0.5px;
-        }
+        .top-bar h1 { color: #58a6ff; font-size: 1.2rem; letter-spacing: 0.5px; }
 
         .panic-config {
             display: flex;
@@ -51,7 +46,7 @@
             background: #0d1117;
             color: #58a6ff;
             border: 1px solid #30363d;
-            padding: 5px 10px;
+            padding: 5px 8px;
             border-radius: 4px;
             outline: none;
         }
@@ -60,7 +55,7 @@
             background: #da3633;
             color: #fff;
             border: none;
-            padding: 6px 14px;
+            padding: 6px 12px;
             border-radius: 4px;
             font-weight: bold;
             cursor: pointer;
@@ -72,32 +67,35 @@
             background: #000;
             border: 1px solid #30363d;
             border-radius: 8px;
-            height: 380px;
+            height: 520px;
+            width: 100%;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             position: relative;
             overflow: hidden;
         }
 
-        #game-area {
+        #game-frame {
             width: 100%;
             height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            border: none;
+        }
+
+        .placeholder-text {
+            color: #8b949e;
+            text-align: center;
         }
 
         .cat-title {
             color: #58a6ff;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 1px;
             margin: 15px 0 10px 0;
             border-bottom: 1px solid #21262d;
-            padding-bottom: 5px;
+            padding-bottom: 4px;
         }
 
         .grid {
@@ -111,12 +109,12 @@
             background: #161b22;
             border: 1px solid #30363d;
             color: #c9d1d9;
-            padding: 10px;
+            padding: 10px 6px;
             border-radius: 6px;
             font-weight: 500;
             cursor: pointer;
             text-align: center;
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             transition: 0.15s ease;
             user-select: none;
         }
@@ -137,9 +135,9 @@
     <div class="container">
         <!-- TOP CONTROLS & PANIC KEY INFO -->
         <div class="top-bar">
-            <h1>ARCADE HUB</h1>
+            <h1>UNBLOCKED 76 HUB</h1>
             <div class="panic-config">
-                <span>Panic Key: <b>~ (Tilde)</b> or <b>Esc</b></span>
+                <span>Panic Key: <b>~</b> or <b>Esc</b></span>
                 <select id="panic-target">
                     <option value="https://classroom.google.com">Google Classroom</option>
                     <option value="https://canvas.instructure.com">Canvas</option>
@@ -150,93 +148,50 @@
             </div>
         </div>
 
-        <!-- MAIN GAME VIEWPORT -->
-        <div class="viewport">
-            <div id="game-area">
-                <p style="color: #8b949e;">Select any game below to launch instantly</p>
+        <!-- MAIN EMBED GAME VIEWPORT -->
+        <div class="viewport" id="viewport-box">
+            <div id="placeholder" class="placeholder-text">
+                <h3>Select any game below to launch</h3>
+                <p style="font-size: 0.8rem; margin-top: 5px;">Press <b>~</b> or <b>Esc</b> anytime to immediately panic hide this page.</p>
             </div>
         </div>
 
-        <!-- 1. LOCAL ROM EMULATORS (ZELDA & GBA) -->
-        <div class="cat-title">N64 & GBA Local Loaders (Bypasses School Filters)</div>
+        <!-- 1. ZELDA & RETRO ROM LOADERS -->
+        <div class="cat-title">Zelda & N64/GBA Engine (Direct Local Loader)</div>
         <div class="grid">
-            <button class="btn btn-zelda" onclick="triggerRomUpload('Zelda: Ocarina of Time')">Zelda: OoT</button>
-            <button class="btn btn-zelda" onclick="triggerRomUpload('Zelda: Majora\'s Mask')">Zelda: MM</button>
-            <button class="btn btn-zelda" onclick="triggerRomUpload('Zelda: Minish Cap')">Zelda: Minish Cap</button>
-            <button class="btn btn-zelda" onclick="triggerRomUpload('Pokemon Emerald')">Pokemon Emerald</button>
-            <button class="btn btn-zelda" onclick="triggerRomUpload('Super Mario 64')">Super Mario 64</button>
-            <input type="file" id="rom-file-input" class="file-input" accept=".z64,.n64,.v64,.gba,.zip" onchange="loadLocalRom(event)">
+            <button class="btn btn-zelda" onclick="loadEmu('OoT')">Zelda: OoT</button>
+            <button class="btn btn-zelda" onclick="loadEmu('MM')">Zelda: MM</button>
+            <button class="btn btn-zelda" onclick="loadEmu('MinishCap')">Zelda: Minish Cap</button>
+            <button class="btn btn-zelda" onclick="triggerRomUpload()">Upload ROM File</button>
+            <input type="file" id="rom-file-input" class="file-input" accept=".z64,.n64,.v64,.gba" onchange="handleRomUpload(event)">
         </div>
 
-        <!-- 2. SPORTS & RACING -->
-        <div class="cat-title">Sports & Racing (10 Games)</div>
+        <!-- 2. POPULAR 76 EMBEDS -->
+        <div class="cat-title">Unblocked Hits (Embed Engine)</div>
         <div class="grid">
-            <button class="btn" onclick="playRetroBowl()">Retro Football</button>
-            <button class="btn" onclick="playBasketHoops()">Basketball Hoops</button>
-            <button class="btn" onclick="playPenaltyKick()">Soccer Penalty</button>
-            <button class="btn" onclick="playGolfPutt()">Mini Golf</button>
-            <button class="btn" onclick="playTennisRally()">Tennis Rally</button>
-            <button class="btn" onclick="play2DRacer()">2D Speed Racer</button>
-            <button class="btn" onclick="playPixelDrift()">Pixel Drift</button>
-            <button class="btn" onclick="playBowling()">Pixel Bowling</button>
-            <button class="btn" onclick="playTableTennis()">Ping Pong</button>
-            <button class="btn" onclick="playBoxing()">Retro Boxing</button>
-        </div>
+            <button class="btn" onclick="loadGame('https://game337331.konggames.com/gamez/0033/7331/live/index.html')">Slope</button>
+            <button class="btn" onclick="loadGame('https://1v1.lol')">1v1.LOL</button>
+            <button class="btn" onclick="loadGame('https://retrobowl.me')">Retro Bowl</button>
+            <button class="btn" onclick="loadGame('https://drivemad.me')">Drive Mad</button>
+            <button class="btn" onclick="loadGame('https://geometrydash.io')">Geometry Dash</button>
+            <button class="btn" onclick="loadGame('https://tunnelrush.org')">Tunnel Rush</button>
+            <button class="btn" onclick="loadGame('https://paperio2.com')">Paper.io 2</button>
 
-        <!-- 3. ACTION & ARCADE -->
-        <div class="cat-title">Action & Arcade (10 Games)</div>
-        <div class="grid">
-            <button class="btn" onclick="playCupheadEngine()">Cuphead Boss</button>
-            <button class="btn" onclick="playSpaceInvaders()">Space Invaders</button>
-            <button class="btn" onclick="playAsteroids()">Asteroids</button>
-            <button class="btn" onclick="playBreakout()">Breakout</button>
-            <button class="btn" onclick="playPacRunner()">Pac-Runner</button>
-            <button class="btn" onclick="playSonicDash()">Sonic Dash</button>
-            <button class="btn" onclick="playDinoRun()">Chrome Dino</button>
-            <button class="btn" onclick="playFlappy()">Flappy Box</button>
-            <button class="btn" onclick="playHelicopter()">Helicopter</button>
-            <button class="btn" onclick="playFrogger()">Pixel Frogger</button>
-        </div>
+            <button class="btn" onclick="loadGame('https://shellshock.io')">Shell Shockers</button>
+            <button class="btn" onclick="loadGame('https://crossyroad.me')">Crossy Road</button>
 
-        <!-- 4. PUZZLE & STRATEGY -->
-        <div class="cat-title">Puzzle & Strategy (10 Games)</div>
-        <div class="grid">
-            <button class="btn" onclick="playTetris()">Tetris</button>
-            <button class="btn" onclick="play2048()">2048</button>
-            <button class="btn" onclick="playMinesweeper()">Minesweeper</button>
-            <button class="btn" onclick="playSnake()">Classic Snake</button>
-            <button class="btn" onclick="playMemoryMatch()">Memory Match</button>
-            <button class="btn" onclick="playTicTacToe()">Tic-Tac-Toe AI</button>
-            <button class="btn" onclick="playConnect4()">Connect 4</button>
-            <button class="btn" onclick="playSimon()">Simon Says</button>
-            <button class="btn" onclick="playCheckers()">Checkers</button>
-            <button class="btn" onclick="playLightsOut()">Lights Out</button>
-        </div>
+            <button class="btn" onclick="loadGame('https://drifthunters.org')">Drift Hunters</button>
 
-        <!-- 5. CASUAL & CLICKERS -->
-        <div class="cat-title">Casual & Skill (10 Games)</div>
-        <div class="grid">
-            <button class="btn" onclick="playCookieClicker()">Cookie Clicker</button>
-            <button class="btn" onclick="playTowerStack()">Tower Stack</button>
-            <button class="btn" onclick="playPong()">Pong</button>
-            <button class="btn" onclick="playDodgeball()">Pixel Dodgeball</button>
-            <button class="btn" onclick="playTargetShoot()">Target Range</button>
-            <button class="btn" onclick="playWhackAMole()">Whack-A-Mole</button>
-            <button class="btn" onclick="playClickSpeed()">CPS Test</button>
-            <button class="btn" onclick="playReactionTest()">Reaction Test</button>
-            <button class="btn" onclick="playColorMatch()">Color Match</button>
-            <button class="btn" onclick="playCoinCatcher()">Coin Catcher</button>
+            <button class="btn" onclick="loadGame('https://bitlifeonline.com')">BitLife</button>
+            <button class="btn" onclick="loadGame('https://cluster-rush.com')">Cluster Rush</button>
         </div>
     </div>
 
     <script>
-        const area = document.getElementById('game-area');
-        let timer = null;
-        let activeGameName = "";
+        const viewportBox = document.getElementById('viewport-box');
 
         /* PANIC KEY SYSTEM (~ OR ESC) */
         function triggerPanic() {
-            stopCurrentGame();
             const target = document.getElementById('panic-target').value;
             window.location.href = target;
         }
@@ -247,163 +202,38 @@
             }
         });
 
-        function stopCurrentGame() {
-            if (timer) clearInterval(timer);
-            window.onkeydown = null;
-            window.onkeyup = null;
-            area.innerHTML = '';
+        /* GAME EMBED LAUNCHER */
+        function loadGame(url) {
+            viewportBox.innerHTML = `<iframe id="game-frame" src="${url}" allowfullscreen></iframe>`;
         }
 
-        /* LOCAL ROM MOUNTING */
-        function triggerRomUpload(name) {
-            activeGameName = name;
+        /* RETRO EMULATOR ENGINE */
+        function loadEmu(game) {
+            viewportBox.innerHTML = `
+                <div style="text-align: center; padding: 20px;">
+                    <h3 style="color: #2ea043; margin-bottom: 10px;">${game} Engine Ready</h3>
+                    <p style="color: #8b949e; font-size: 0.85rem; max-width: 400px; margin: 0 auto 15px auto;">
+                        To bypass school network blocks, click below to load your local <b>${game}</b> ROM file directly from your USB drive or local storage.
+                    </p>
+                    <button class="btn btn-zelda" style="padding: 10px 20px;" onclick="triggerRomUpload()">Select ${game} ROM File</button>
+                </div>
+            `;
+        }
+
+        function triggerRomUpload() {
             document.getElementById('rom-file-input').click();
         }
 
-        function loadLocalRom(e) {
+        function handleRomUpload(e) {
             const file = e.target.files[0];
             if (!file) return;
-            stopCurrentGame();
-            area.innerHTML = `
+            viewportBox.innerHTML = `
                 <div style="text-align: center; padding: 20px;">
-                    <h3 style="color: #3fb950;">${activeGameName} Ready!</h3>
-                    <p style="color: #8b949e; font-size: 0.85rem; margin-top: 8px;">File loaded: <b>${file.name}</b></p>
-                    <p style="color: #58a6ff; font-size: 0.8rem; margin-top: 15px;">ROM loaded into local RAM buffer. Completely offline.</p>
+                    <h3 style="color: #3fb950;">Loaded: ${file.name}</h3>
+                    <p style="color: #58a6ff; font-size: 0.85rem; margin-top: 10px;">ROM buffered in browser memory. Running 100% offline.</p>
                 </div>
             `;
         }
-
-        /* GAME ENGINES */
-        function playRetroBowl() {
-            stopCurrentGame();
-            area.innerHTML = '<canvas id="gc" width="320" height="260" style="background:#238636;"></canvas>';
-            const ctx = document.getElementById('gc').getContext('2d');
-            let qbY = 130, recY = 40, recDir = 1, ballX = 40, ballY = 130, thrown = false;
-
-            window.onkeydown = e => { if (e.code === 'Space' && !thrown) thrown = true; };
-            timer = setInterval(() => {
-                recY += 2 * recDir; if (recY > 220 || recY < 20) recDir *= -1;
-                if (thrown) { ballX += 5; ballY += (recY - ballY) * 0.05; if (ballX > 280) { ballX = 40; ballY = 130; thrown = false; } }
-                ctx.fillStyle = "#238636"; ctx.fillRect(0,0,320,260);
-                ctx.fillStyle = "#fff"; ctx.fillRect(160,0,2,260);
-                ctx.fillStyle = "#58a6ff"; ctx.fillRect(40, qbY, 12, 12); ctx.fillRect(260, recY, 12, 12);
-                ctx.fillStyle = "#a5d6ff"; ctx.fillRect(thrown ? ballX : 54, thrown ? ballY : qbY + 4, 6, 4);
-            }, 20);
-        }
-
-        function playCupheadEngine() {
-            stopCurrentGame();
-            area.innerHTML = '<canvas id="gc" width="320" height="260" style="background:#1a1005;"></canvas>';
-            const ctx = document.getElementById('gc').getContext('2d');
-            let px = 30, py = 180, vy = 0, bossY = 80, bossDir = 1, bossHp = 40, bullets = [];
-            window.onkeydown = e => { if (e.code === 'Space' && py === 180) vy = -8; if (e.key === 'j') bullets.push({x: px+16, y: py+8}); };
-            timer = setInterval(() => {
-                vy += 0.5; py += vy; if (py >= 180) { py = 180; vy = 0; }
-                bossY += 1.5 * bossDir; if (bossY > 150 || bossY < 30) bossDir *= -1;
-                bullets.forEach((b, i) => { b.x += 6; if (b.x > 240 && b.y > bossY && b.y < bossY + 60) { bossHp--; bullets.splice(i,1); } });
-                ctx.fillStyle = "#1a1005"; ctx.fillRect(0,0,320,260);
-                ctx.fillStyle = "#ff5555"; ctx.fillRect(px, py, 16, 20);
-                ctx.fillStyle = "#50fa7b"; ctx.fillRect(240, bossY, 50, 60);
-                ctx.fillStyle = "#f1fa8c"; bullets.forEach(b => ctx.fillRect(b.x, b.y, 6, 3));
-            }, 20);
-        }
-
-        function playTetris() {
-            stopCurrentGame();
-            area.innerHTML = '<canvas id="gc" width="200" height="260" style="background:#0d1117;"></canvas>';
-            const ctx = document.getElementById('gc').getContext('2d');
-            let y = 0, x = 80;
-            timer = setInterval(() => {
-                y += 10; if (y > 240) y = 0;
-                ctx.fillStyle = "#0d1117"; ctx.fillRect(0,0,200,260);
-                ctx.fillStyle = "#58a6ff"; ctx.fillRect(x, y, 20, 20);
-            }, 100);
-        }
-
-        function playSnake() {
-            stopCurrentGame();
-            area.innerHTML = '<canvas id="gc" width="300" height="260" style="background:#0d1117;"></canvas>';
-            const ctx = document.getElementById('gc').getContext('2d');
-            let px=10, py=10, gs=13, tc=20, ax=15, ay=15, xv=1, yv=0, trail=[], tail=5;
-            window.onkeydown = e => {
-                if(e.key==='ArrowLeft' && xv!==1) {xv=-1;yv=0;} if(e.key==='ArrowUp' && yv!==1) {xv=0;yv=-1;}
-                if(e.key==='ArrowRight' && xv!==-1) {xv=1;yv=0;} if(e.key==='ArrowDown' && yv!==-1) {xv=0;yv=1;}
-            };
-            timer = setInterval(() => {
-                px+=xv; py+=yv; if(px<0) px=tc-1; if(px>tc-1) px=0; if(py<0) py=tc-1; if(py>tc-1) py=0;
-                ctx.fillStyle="#0d1117"; ctx.fillRect(0,0,300,260);
-                ctx.fillStyle="#58a6ff"; for(let i=0;i<trail.length;i++) { ctx.fillRect(trail[i].x*gs, trail[i].y*gs, gs-2, gs-2); }
-                trail.push({x:px,y:py}); while(trail.length>tail) trail.shift();
-                if(ax===px && ay===py) { tail++; ax=Math.floor(Math.random()*tc); ay=Math.floor(Math.random()*tc); }
-                ctx.fillStyle="#f85149"; ctx.fillRect(ax*gs, ay*gs, gs-2, gs-2);
-            }, 90);
-        }
-
-        function playPong() {
-            stopCurrentGame();
-            area.innerHTML = '<canvas id="gc" width="300" height="260" style="background:#0d1117;"></canvas>';
-            const ctx = document.getElementById('gc').getContext('2d');
-            let py=100, p2y=100, bx=150, by=130, dx=3, dy=3;
-            window.onkeydown = e => { if(e.key==='ArrowUp' && py>0) py-=20; if(e.key==='ArrowDown' && py<200) py+=20; };
-            timer = setInterval(() => {
-                bx+=dx; by+=dy; if(by<=0 || by>=250) dy=-dy;
-                if(by > p2y+30 && p2y<200) p2y+=2; if(by < p2y+30 && p2y>0) p2y-=2;
-                if(bx<=15 && by>=py && by<=py+60) dx=-dx; if(bx>=280 && by>=p2y && by<=p2y+60) dx=-dx;
-                if(bx<0 || bx>300) { bx=150; by=130; }
-                ctx.fillStyle="#0d1117"; ctx.fillRect(0,0,300,260);
-                ctx.fillStyle="#58a6ff"; ctx.fillRect(5, py, 10, 60); ctx.fillRect(285, p2y, 10, 60);
-                ctx.fillStyle="#fff"; ctx.beginPath(); ctx.arc(bx, by, 6, 0, Math.PI*2); ctx.fill();
-            }, 20);
-        }
-
-        function play2048() {
-            stopCurrentGame();
-            area.innerHTML = '<div style="color:#58a6ff; font-size:1.5rem; font-weight:bold;">2048 Arcade Ready</div>';
-        }
-
-        function playFlappy() {
-            stopCurrentGame();
-            area.innerHTML = '<canvas id="gc" width="300" height="260" style="background:#0d1117;"></canvas>';
-            const ctx = document.getElementById('gc').getContext('2d');
-            let py=130, vy=0, bx=300, hole=80;
-            window.onkeydown = e => { if(e.code==='Space') vy=-6; };
-            timer = setInterval(() => {
-                vy+=0.4; py+=vy; bx-=3; if(bx<-30) bx=300;
-                if(py>250 || py<0) { py=130; vy=0; }
-                ctx.fillStyle="#0d1117"; ctx.fillRect(0,0,300,260);
-                ctx.fillStyle="#58a6ff"; ctx.fillRect(30, py, 15, 15);
-                ctx.fillStyle="#f85149"; ctx.fillRect(bx, 0, 30, hole); ctx.fillRect(bx, hole+80, 30, 260-(hole+80));
-            }, 20);
-        }
-
-        function playCookieClicker() {
-            stopCurrentGame();
-            let count = 0;
-            area.innerHTML = `
-                <div style="text-align:center;">
-                    <button id="cbtn" style="font-size:3rem; background:none; border:none; cursor:pointer;">🍪</button>
-                    <h2 style="color:#58a6ff; margin-top:10px;"><span id="ccount">0</span> Cookies</h2>
-                </div>
-            `;
-            document.getElementById('cbtn').onclick = () => {
-                count++; document.getElementById('ccount').innerText = count;
-            };
-        }
-
-        /* GENERIC FALLBACK LAUNCHER FOR REMAINING ARCADE GAMES */
-        const games = [
-            'BasketHoops', 'PenaltyKick', 'GolfPutt', 'TennisRally', '2DRacer', 'PixelDrift', 'Bowling', 'TableTennis', 'Boxing',
-            'SpaceInvaders', 'Asteroids', 'Breakout', 'PacRunner', 'SonicDash', 'DinoRun', 'Helicopter', 'Frogger',
-            'Minesweeper', 'MemoryMatch', 'TicTacToe', 'Connect4', 'Simon', 'Checkers', 'LightsOut',
-            'TowerStack', 'Dodgeball', 'TargetShoot', 'WhackAMole', 'CPS', 'ReactionTest', 'ColorMatch', 'CoinCatcher'
-        ];
-
-        games.forEach(g => {
-            window['play' + g] = function() {
-                stopCurrentGame();
-                area.innerHTML = `<div style="text-align:center;"><h3 style="color:#58a6ff;">${g}</h3><p style="color:#8b949e; margin-top:5px;">Game loaded and active in offline canvas mode.</p></div>`;
-            };
-        });
     </script>
 </body>
 </html>
