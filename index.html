@@ -19,7 +19,6 @@
             user-select: none;
         }
 
-        /* Dynamic Background Layer */
         #bg-layer {
             position: fixed;
             top: 0;
@@ -33,7 +32,6 @@
             z-index: 1;
         }
 
-        /* Dashboard UI */
         .dashboard {
             position: relative;
             z-index: 2;
@@ -66,7 +64,6 @@
             font-weight: bold;
         }
 
-        /* Custom Build Banner */
         .custom-banner {
             background: rgba(22, 27, 34, 0.85);
             border: 1px dashed #00ffcc;
@@ -93,9 +90,10 @@
             border-radius: 6px;
             font-weight: bold;
             cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
         }
 
-        /* Animated Title Header */
         .game-title {
             font-size: 2.8rem;
             font-weight: bold;
@@ -115,7 +113,6 @@
             100% { transform: scale(1); opacity: 1; }
         }
 
-        /* PS4 Carousel Navigation */
         .carousel {
             display: flex;
             gap: 20px;
@@ -125,7 +122,6 @@
         }
         .carousel::-webkit-scrollbar { display: none; }
 
-        /* Animated Game Cards */
         .card {
             min-width: 170px;
             height: 230px;
@@ -187,7 +183,6 @@
             font-weight: 800;
         }
 
-        /* Draggable App Window */
         .window {
             position: absolute;
             top: 8%;
@@ -267,7 +262,6 @@
             background: #000;
         }
 
-        /* ROM Launcher Interface */
         .rom-picker-ui {
             display: flex;
             flex-direction: column;
@@ -324,8 +318,8 @@
             </div>
 
             <div class="custom-banner">
-                <p><strong>Want your own custom site layout?</strong> Talk to me in person and I can code a personalized dashboard for a snack or money!</p>
-                <button class="custom-btn" onclick="alert('Talk to me in person to set up your custom layout!')">Request Custom OS</button>
+                <p><strong>Want your own custom site layout?</strong> Email me or talk to me in person to get your own custom dashboard!</p>
+                <a class="custom-btn" href="mailto:linkmorningstar587@gmail.com?subject=Custom%20Arcade%20OS%20Layout%20Request">Email Me</a>
             </div>
         </div>
 
@@ -334,23 +328,47 @@
         </div>
 
         <div class="carousel">
-            <!-- Zelda: Ocarina of Time -->
+            <!-- 1. Zelda: Ocarina of Time -->
             <div class="card" 
                  style="background-image: url('https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?auto=format&fit=crop&w=400&q=80');"
                  onmouseenter="previewGame('The Legend of Zelda: Ocarina of Time', 'https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?auto=format&fit=crop&w=1280&q=80')"
-                 onclick="launchRomEmulator('Zelda: Ocarina of Time')">
+                 onclick="launchRomEmulator('Zelda: Ocarina of Time', '.n64,.z64,.v64')">
                 <span>Zelda: Ocarina of Time</span>
             </div>
 
-            <!-- Zelda: Majora's Mask 64 -->
+            <!-- 2. Zelda: Majora's Mask -->
             <div class="card" 
                  style="background-image: url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=400&q=80');"
                  onmouseenter="previewGame('The Legend of Zelda: Majora\'s Mask 64', 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1280&q=80')"
-                 onclick="launchRomEmulator('Zelda: Majora\'s Mask 64')">
-                <span>Zelda: Majora's Mask 64</span>
+                 onclick="launchRomEmulator('Zelda: Majora\'s Mask 64', '.n64,.z64,.v64')">
+                <span>Zelda: Majora's Mask</span>
             </div>
 
-            <!-- Eaglercraft -->
+            <!-- 3. Zelda: Breath of the Wild -->
+            <div class="card" 
+                 style="background-image: url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=400&q=80');"
+                 onmouseenter="previewGame('The Legend of Zelda: Breath of the Wild', 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1280&q=80')"
+                 onclick="launchRomEmulator('Zelda: Breath of the Wild', '.xci,.nsp,.wux')">
+                <span>Zelda: Breath of the Wild</span>
+            </div>
+
+            <!-- 4. Super Smash Bros. Brawl -->
+            <div class="card" 
+                 style="background-image: url('https://images.unsplash.com/photo-1534423861386-85a16f5d13fd?auto=format&fit=crop&w=400&q=80');"
+                 onmouseenter="previewGame('Super Smash Bros. Brawl', 'https://images.unsplash.com/photo-1534423861386-85a16f5d13fd?auto=format&fit=crop&w=1280&q=80')"
+                 onclick="launchRomEmulator('Super Smash Bros. Brawl', '.iso,.wfs,.rvz')">
+                <span>Smash Bros. Brawl</span>
+            </div>
+
+            <!-- 5. Baldi's Basics -->
+            <div class="card" 
+                 style="background-image: url('https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=400&q=80');"
+                 onmouseenter="previewGame('Baldi\'s Basics Classic', 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1280&q=80')"
+                 onclick="launchDataApp('Baldi\'s Basics', 'Educational WebGL Engine Loaded Locally')">
+                <span>Baldi's Basics</span>
+            </div>
+
+            <!-- 6. Eaglercraft -->
             <div class="card" 
                  style="background-image: url('https://images.unsplash.com/photo-1627856013091-fed6e4e30025?auto=format&fit=crop&w=400&q=80');"
                  onmouseenter="previewGame('Eaglercraft (Minecraft Local)', 'https://images.unsplash.com/photo-1627856013091-fed6e4e30025?auto=format&fit=crop&w=1280&q=80')"
@@ -358,7 +376,7 @@
                 <span>Eaglercraft</span>
             </div>
 
-            <!-- FNAF: Security Breach -->
+            <!-- 7. FNAF: Security Breach -->
             <div class="card" 
                  style="background-image: url('https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=400&q=80');"
                  onmouseenter="previewGame('FNAF: Security Breach', 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=1280&q=80')"
@@ -366,23 +384,103 @@
                 <span>FNAF: Security Breach</span>
             </div>
 
-            <!-- Cuphead -->
+            <!-- 8. Slope Game -->
+            <div class="card" 
+                 style="background-image: url('https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=400&q=80');"
+                 onmouseenter="previewGame('Slope 3D', 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1280&q=80')"
+                 onclick="launchDataApp('Slope', 'Fast 3D Physics WebGL Engine')">
+                <span>Slope 3D</span>
+            </div>
+
+            <!-- 9. Retro Bowl -->
+            <div class="card" 
+                 style="background-image: url('https://images.unsplash.com/photo-1566577739112-5180d4bf9390?auto=format&fit=crop&w=400&q=80');"
+                 onmouseenter="previewGame('Retro Bowl', 'https://images.unsplash.com/photo-1566577739112-5180d4bf9390?auto=format&fit=crop&w=1280&q=80')"
+                 onclick="launchDataApp('Retro Bowl', 'Pixel Football Engine')">
+                <span>Retro Bowl</span>
+            </div>
+
+            <!-- 10. Geometry Dash -->
             <div class="card" 
                  style="background-image: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=400&q=80');"
-                 onmouseenter="previewGame('Cuphead HTML5 Port', 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1280&q=80')"
+                 onmouseenter="previewGame('Geometry Dash Lite', 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1280&q=80')"
+                 onclick="launchDataApp('Geometry Dash', 'Rhythm Platformer Loaded')">
+                <span>Geometry Dash</span>
+            </div>
+
+            <!-- 11. Flappy Bird -->
+            <div class="card" 
+                 style="background-image: url('https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?auto=format&fit=crop&w=400&q=80');"
+                 onmouseenter="previewGame('Flappy Bird HTML5', 'https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?auto=format&fit=crop&w=1280&q=80')"
+                 onclick="launchDataApp('Flappy Bird', 'Classic Arcade Engine')">
+                <span>Flappy Bird</span>
+            </div>
+
+            <!-- 12. 2048 Game -->
+            <div class="card" 
+                 style="background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=400&q=80');"
+                 onmouseenter="previewGame('2048 Puzzle', 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1280&q=80')"
+                 onclick="launchDataApp('2048', 'Number Grid Engine')">
+                <span>2048</span>
+            </div>
+
+            <!-- 13. Cuphead -->
+            <div class="card" 
+                 style="background-image: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=400&q=80');"
+                 onmouseenter="previewGame('Cuphead Web Port', 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1280&q=80')"
                  onclick="launchDataApp('Cuphead', 'WebGL Game Engine Loaded Locally')">
                 <span>Cuphead</span>
             </div>
 
-            <!-- COD Zombies -->
+            <!-- 14. COD Zombies -->
             <div class="card" 
                  style="background-image: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&q=80');"
-                 onmouseenter="previewGame('COD Zombies', 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1280&q=80')"
+                 onmouseenter="previewGame('COD Zombies Engine', 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1280&q=80')"
                  onclick="launchDataApp('COD Zombies', '3D Zombies Engine Loaded Locally')">
                 <span>COD Zombies</span>
             </div>
 
-            <!-- Custom Web Browser -->
+            <!-- 15. Kingdom Hearts -->
+            <div class="card" 
+                 style="background-image: url('https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=400&q=80');"
+                 onmouseenter="previewGame('Kingdom Hearts', 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=1280&q=80')"
+                 onclick="launchRomEmulator('Kingdom Hearts', '.iso,.cso,.bin')">
+                <span>Kingdom Hearts</span>
+            </div>
+
+            <!-- 16. Resident Evil 4 -->
+            <div class="card" 
+                 style="background-image: url('https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=400&q=80');"
+                 onmouseenter="previewGame('Resident Evil 4', 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=1280&q=80')"
+                 onclick="launchRomEmulator('Resident Evil 4', '.iso,.gcm,.rvz')">
+                <span>Resident Evil 4</span>
+            </div>
+
+            <!-- 17. Game Boy Advance Emulator Core -->
+            <div class="card" 
+                 style="background-image: url('https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=400&q=80');"
+                 onmouseenter="previewGame('GBA Emulator Engine', 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=1280&q=80')"
+                 onclick="launchRomEmulator('GBA Console Engine', '.gba,.agb')">
+                <span>GBA Console Core</span>
+            </div>
+
+            <!-- 18. Nintendo DS Emulator Core -->
+            <div class="card" 
+                 style="background-image: url('https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?auto=format&fit=crop&w=400&q=80');"
+                 onmouseenter="previewGame('NDS Emulator Engine', 'https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?auto=format&fit=crop&w=1280&q=80')"
+                 onclick="launchRomEmulator('NDS Console Engine', '.nds')">
+                <span>NDS Console Core</span>
+            </div>
+
+            <!-- 19. PlayStation 1 Core -->
+            <div class="card" 
+                 style="background-image: url('https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=400&q=80');"
+                 onmouseenter="previewGame('PS1 Emulator Core', 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=1280&q=80')"
+                 onclick="launchRomEmulator('PS1 Console Core', '.bin,.cue,.iso')">
+                <span>PS1 Console Core</span>
+            </div>
+
+            <!-- 20. Custom Web Browser -->
             <div class="card" 
                  style="background-image: url('https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=400&q=80');"
                  onmouseenter="previewGame('Custom Web Browser', 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1280&q=80')"
@@ -401,7 +499,7 @@
             </div>
         </div>
         <div class="browser-bar" id="url-bar-container" style="display:none;">
-            <input type="text" id="url-input" placeholder="Enter URL or search query...">
+            <input type="text" id="url-input" placeholder="Search DuckDuckGo or enter URL...">
             <button onclick="navigateBrowser()">Go</button>
         </div>
         <div id="win-body" style="width:100%; height:100%;"></div>
@@ -425,7 +523,6 @@
             document.getElementById('bg-layer').style.backgroundImage = `url('${bgUrl}')`;
         }
 
-        /* Displays Launcher Screen inside Window */
         function launchDataApp(title, subtitle) {
             winTitle.innerText = title;
             urlBarContainer.style.display = "none";
@@ -440,21 +537,41 @@
             appWindow.style.display = "flex";
         }
 
-        /* Loads the actual game file into the iframe */
         function loadGameFrame(title) {
-            const gamePaths = {
-                'Eaglercraft': './eaglercraft.html', // File path inside your GitHub repo
-                'FNAF: Security Breach': './fnaf.html',
-                'Cuphead': './cuphead.html',
-                'COD Zombies': './cod.html'
-            };
-
-            const path = gamePaths[title];
-
-            if (path) {
-                winBody.innerHTML = `<iframe src="${path}" class="window-content" style="width:100%; height:100%; border:none;" allow="fullscreen; autoplay; pointer-lock"></iframe>`;
+            if (title === 'Eaglercraft') {
+                const eaglerHtml = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <meta charset="utf-8">
+                        <style>html, body, iframe { width: 100%; height: 100%; margin: 0; padding: 0; border: none; overflow: hidden; background: #000; }</style>
+                    </head>
+                    <body>
+                        <iframe src="https://eaglercraft.ru/" allow="fullscreen; autoplay; pointer-lock"></iframe>
+                    </body>
+                    </html>
+                `;
+                const blob = new Blob([eaglerHtml], { type: 'text/html' });
+                winBody.innerHTML = `<iframe src="${URL.createObjectURL(blob)}" class="window-content" allow="fullscreen; autoplay; pointer-lock"></iframe>`;
+            } else if (title === "Baldi's Basics") {
+                winBody.innerHTML = `<iframe src="https://mitch-games.github.io/baldis-basics/" class="window-content" allow="fullscreen; autoplay; pointer-lock"></iframe>`;
+            } else if (title === "Slope") {
+                winBody.innerHTML = `<iframe src="https://kbhgames.com/game/slope" class="window-content" allow="fullscreen; autoplay; pointer-lock"></iframe>`;
+            } else if (title === "Retro Bowl") {
+                winBody.innerHTML = `<iframe src="https://game316006.konggames.com/gamez/0031/6006/live/index.html" class="window-content" allow="fullscreen; autoplay"></iframe>`;
+            } else if (title === "Geometry Dash") {
+                winBody.innerHTML = `<iframe src="https://freegeometrydash.com/geometry-dash-lite/" class="window-content" allow="fullscreen; autoplay"></iframe>`;
+            } else if (title === "Flappy Bird") {
+                winBody.innerHTML = `<iframe src="https://flappybird.io/" class="window-content" allow="fullscreen; autoplay"></iframe>`;
+            } else if (title === "2048") {
+                winBody.innerHTML = `<iframe src="https://play2048.co/" class="window-content" allow="fullscreen"></iframe>`;
             } else {
-                alert('Game HTML file not configured! Make sure the file exists in your repository.');
+                winBody.innerHTML = `
+                    <div style="background: #0d0d13; color: #ff5555; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; margin: 0; text-align: center;">
+                        <h3 style="margin-bottom: 10px;">${title} Payload Missing</h3>
+                        <p style="color: #aaa; max-width: 80%;">Upload target file (e.g. <b>${title.toLowerCase().replace(/[^a-z0-9]/g, '')}.html</b>) to your GitHub repository to launch offline.</p>
+                    </div>
+                `;
             }
         }
 
@@ -468,33 +585,31 @@
 
         function navigateBrowser() {
             let input = urlInput.value.trim();
-            let htmlContent = "";
+            let targetUrl = "";
 
             if (!input) {
-                htmlContent = `
-                    <body style="background:#111;color:#fff;font-family:sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;margin:0;">
-                        <h2 style="color:#00ffcc;">Arcade OS Private Search</h2>
-                        <p style="color:#888;">Type a URL or term above to browse directly inside the app frame.</p>
-                    </body>
-                `;
-                const blob = new Blob([htmlContent], { type: 'text/html' });
-                winBody.innerHTML = `<iframe src="${URL.createObjectURL(blob)}" class="window-content"></iframe>`;
+                targetUrl = "https://html.duckduckgo.com/html/";
+            } else if (input.startsWith('http://') || input.startsWith('https://')) {
+                targetUrl = input;
+            } else if (input.includes('.') && !input.includes(' ')) {
+                targetUrl = 'https://' + input;
             } else {
-                let targetUrl = input.startsWith('http') ? input : 'https://' + input;
-                winBody.innerHTML = `<iframe src="${targetUrl}" class="window-content"></iframe>`;
+                targetUrl = 'https://html.duckduckgo.com/html/?q=' + encodeURIComponent(input);
             }
+
+            winBody.innerHTML = `<iframe src="${targetUrl}" class="window-content" allow="fullscreen"></iframe>`;
         }
 
-        /* Pure Offline Canvas ROM Reader for N64 */
-        function launchRomEmulator(gameName) {
+        function launchRomEmulator(gameName, acceptedExts) {
             winTitle.innerText = gameName;
             urlBarContainer.style.display = "none";
+            const exts = acceptedExts || ".n64,.z64,.v64,.iso,.wux,.xci,.nsp";
 
             winBody.innerHTML = `
                 <div class="rom-picker-ui" id="rom-setup">
                     <h2>${gameName}</h2>
-                    <p>Select your local <b>.n64</b> or <b>.z64</b> file to load into memory:</p>
-                    <input type="file" id="rom-file-input" accept=".n64,.z64,.v64" class="file-btn">
+                    <p>Select your local dump or ROM file (<b>${exts}</b>) to load into local memory:</p>
+                    <input type="file" id="rom-file-input" accept="${exts}" class="file-btn">
                 </div>
                 <div id="emulator-container" style="width:100%; height:100%; display:none; background:#000;">
                     <canvas id="n64-canvas"></canvas>
@@ -525,10 +640,10 @@
                     ctx.fillStyle = "#00ffcc";
                     ctx.font = "20px Segoe UI";
                     ctx.textAlign = "center";
-                    ctx.fillText(`${gameName} ROM Loaded Successfully (${(romData.length / 1024 / 1024).toFixed(2)} MB)`, canvas.width / 2, canvas.height / 2 - 10);
+                    ctx.fillText(`${gameName} File Verified (${(romData.length / 1024 / 1024).toFixed(2)} MB)`, canvas.width / 2, canvas.height / 2 - 10);
                     ctx.fillStyle = "#aaaaaa";
                     ctx.font = "14px Segoe UI";
-                    ctx.fillText("ROM binary verified in local buffer.", canvas.width / 2, canvas.height / 2 + 20);
+                    ctx.fillText("ROM binary verified in local buffer. Connect core to initialize rendering.", canvas.width / 2, canvas.height / 2 + 20);
                 };
                 reader.readAsArrayBuffer(file);
             });
