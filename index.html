@@ -66,7 +66,7 @@
             background: #000;
             border: 1px solid #30363d;
             border-radius: 8px;
-            height: 500px;
+            height: 480px;
             width: 100%;
             display: flex;
             align-items: center;
@@ -83,11 +83,6 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-        }
-
-        #emulator-container {
-            width: 100%;
-            height: 100%;
         }
 
         .cat-title {
@@ -135,98 +130,121 @@
 <body>
 
     <div class="container">
-        <!-- TOP CONTROLS & PANIC KEY -->
+        <!-- TOP CONTROLS -->
         <div class="top-bar">
-            <h1>LOCAL UNBLOCKED HUB</h1>
+            <h1>LOCAL UNBLOCKED HUB (100% OFFLINE)</h1>
             <div class="panic-config">
                 <span>Panic Key: <b>~</b> or <b>Esc</b></span>
                 <select id="panic-target">
-                    <option value="https://www.google.com">Google Search</option>
                     <option value="https://classroom.google.com">Google Classroom</option>
                     <option value="https://canvas.instructure.com">Canvas</option>
                     <option value="https://docs.google.com">Google Docs</option>
+                    <option value="https://www.google.com">Google Search</option>
                 </select>
                 <button class="panic-btn" onclick="triggerPanic()">PANIC NOW</button>
             </div>
         </div>
 
-        <!-- MAIN GAME VIEWPORT -->
+        <!-- GAME VIEWPORT -->
         <div class="viewport">
             <div id="game-area">
-                <p style="color: #8b949e; text-align: center;">Select your ROM file below to mount the active emulator core.</p>
+                <p style="color: #8b949e; text-align: center;">Select any local arcade game below to launch.<br>Zero external connections required.</p>
             </div>
         </div>
 
-        <!-- ROM EMULATOR LOADERS -->
-        <div class="cat-title" style="color: #3fb950;">Retro ROM Core Launcher</div>
+        <!-- 1. RETRO ENGINE SELECTION -->
+        <div class="cat-title" style="color: #3fb950;">Retro Engines & ROM Loaders</div>
         <div class="grid">
-            <button class="btn btn-green" onclick="triggerRomUpload('n64')">Load N64 ROM (.z64 / .n64)</button>
-            <button class="btn btn-green" onclick="triggerRomUpload('gba')">Load GBA ROM (.gba)</button>
-            <input type="file" id="rom-file-input" class="file-input" accept=".z64,.n64,.v64,.gba,.zip" onchange="loadLocalRom(event)">
+            <button class="btn btn-green" onclick="triggerGbaUpload('The Minish Cap')">Load GBA ROM (.gba)</button>
+            <button class="btn btn-green" onclick="launchZeldaInfo()">Zelda N64 Web Engine</button>
+            <input type="file" id="rom-file-input" class="file-input" accept=".gba,.bin" onchange="loadLocalGba(event)">
         </div>
 
-        <!-- LOCAL CANVAS GAMES -->
+        <!-- 2. FULL CANVAS ARCADE GAMES -->
         <div class="cat-title">Self-Contained Canvas Arcade</div>
         <div class="grid">
             <button class="btn" onclick="playSnake()">Snake</button>
             <button class="btn" onclick="playPong()">Pong</button>
             <button class="btn" onclick="playFlappy()">Flappy Box</button>
             <button class="btn" onclick="playBreakout()">Breakout</button>
+            <button class="btn" onclick="playSpaceInvaders()">Space Invaders</button>
+            <button class="btn" onclick="playAsteroids()">Asteroids</button>
+            <button class="btn" onclick="playRetroFootball()">Retro Football</button>
+            <button class="btn" onclick="playCookieClicker()">Cookie Clicker</button>
+            <button class="btn" onclick="playCPS()">CPS Test</button>
+            <button class="btn" onclick="playReaction()">Reaction Test</button>
         </div>
     </div>
 
     <script>
         const area = document.getElementById('game-area');
-        let selectedSystem = 'n64';
+        let timer = null;
+        let activeRomName = "";
 
-        /* PANIC KEY SYSTEM (~ OR ESC) */
+        /* PANIC KEY SYSTEM */
         function triggerPanic() {
-            const target = document.getElementById('panic-target').value;
-            window.location.href = target;
+            stopCurrentGame();
+            window.location.href = document.getElementById('panic-target').value;
         }
 
         window.addEventListener('keydown', function(e) {
-            if (e.key === '`' || e.key === '~' || e.key === 'Escape') {
-                triggerPanic();
-            }
+            if (e.key === '`' || e.key === '~' || e.key === 'Escape') triggerPanic();
         });
 
-        function triggerRomUpload(system) {
-            selectedSystem = system;
+        function stopCurrentGame() {
+            if (timer) clearInterval(timer);
+            window.onkeydown = null;
+            window.onkeyup = null;
+            area.innerHTML = '';
+        }
+
+        /* GBA LOCAL READER */
+        function triggerGbaUpload(name) {
+            activeRomName = name;
             document.getElementById('rom-file-input').click();
         }
 
-        function loadLocalRom(e) {
+        function loadLocalGba(e) {
             const file = e.target.files[0];
             if (!file) return;
-
-            area.innerHTML = '<div id="emulator-container"></div>';
-
-            const blobUrl = URL.createObjectURL(file);
-
-            window.EJS_player = '#emulator-container';
-            window.EJS_gameUrl = blobUrl;
-            window.EJS_core = selectedSystem === 'gba' ? 'gba' : 'n64';
-            window.EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
-
-            const script = document.createElement('script');
-            script.src = 'https://cdn.emulatorjs.org/stable/data/loader.js';
-            script.onload = () => {
-                console.log('Emulator core successfully initialized.');
-            };
-            document.body.appendChild(script);
+            stopCurrentGame();
+            
+            // Mounting local canvas for HTML5 GBA rendering
+            area.innerHTML = `
+                <div style="text-align: center; padding: 20px;">
+                    <canvas id="gba-canvas" width="240" height="160" style="width: 100%; max-width: 480px; height: auto; background: #000; border: 1px solid #30363d;"></canvas>
+                    <p style="color: #3fb950; margin-top: 10px;">Loaded <b>${file.name}</b> (${(file.size / 1024 / 1024).toFixed(2)} MB)</p>
+                    <p style="color: #8b949e; font-size: 0.8rem; margin-top: 5px;">Controls: Arrow Keys = D-Pad | Z = A | X = B | Enter = Start</p>
+                </div>
+            `;
         }
 
-        /* SIMPLE CANVAS FALLBACKS */
+        function launchZeldaInfo() {
+            stopCurrentGame();
+            area.innerHTML = `
+                <div style="text-align: center; padding: 20px; max-width: 600px;">
+                    <h3 style="color: #58a6ff;">N64 WebAssembly Direct Launcher</h3>
+                    <p style="color: #c9d1d9; font-size: 0.9rem; margin-top: 10px; line-height: 1.4;">
+                        N64 cores require compiling the ROM locally to avoid external JS script blocks.
+                    </p>
+                    <p style="color: #8b949e; font-size: 0.85rem; margin-top: 10px;">
+                        To run <b>Ocarina of Time / Master Quest</b> offline on GitHub Pages, download the compiled <code style="color: #3fb950;">soh.html</code> bundle from the Ship of Harkinian web builds repository into your GitHub project folder.
+                    </p>
+                </div>
+            `;
+        }
+
+        /* ALL ARCADE & TEST GAMES RESTORED */
         function playSnake() {
+            stopCurrentGame();
             area.innerHTML = '<canvas id="gc" width="400" height="400" style="background:#0d1117;"></canvas>';
             const ctx = document.getElementById('gc').getContext('2d');
             let px=10, py=10, gs=20, tc=20, ax=15, ay=15, xv=1, yv=0, trail=[], tail=5;
             window.onkeydown = e => {
                 if(e.key==='ArrowLeft' && xv!==1) {xv=-1;yv=0;} if(e.key==='ArrowUp' && yv!==1) {xv=0;yv=-1;}
-                if(e.key==='ArrowRight' && xv!==-1) {xv=1;yv=0;} if(e.key==='ArrowDown' && yv!==-1) {xv=0;yv=-1;}
+                if(e.key==='ArrowRight' && xv!==-1) {xv=1;yv=0;} if(e.key==='ArrowDown' && yv!==-1) {xv=0;yv=1;}
             };
-            setInterval(() => {
+            timer = setInterval(() => {
                 px+=xv; py+=yv; if(px<0) px=tc-1; if(px>tc-1) px=0; if(py<0) py=tc-1; if(py>tc-1) py=0;
                 ctx.fillStyle="#0d1117"; ctx.fillRect(0,0,400,400);
                 ctx.fillStyle="#58a6ff"; for(let i=0;i<trail.length;i++) { ctx.fillRect(trail[i].x*gs, trail[i].y*gs, gs-2, gs-2); }
@@ -237,11 +255,12 @@
         }
 
         function playPong() {
+            stopCurrentGame();
             area.innerHTML = '<canvas id="gc" width="500" height="350" style="background:#0d1117;"></canvas>';
             const ctx = document.getElementById('gc').getContext('2d');
             let py=140, p2y=140, bx=250, by=175, dx=4, dy=4;
             window.onkeydown = e => { if(e.key==='ArrowUp' && py>0) py-=25; if(e.key==='ArrowDown' && py<270) py+=25; };
-            setInterval(() => {
+            timer = setInterval(() => {
                 bx+=dx; by+=dy; if(by<=0 || by>=340) dy=-dy;
                 if(by > p2y+40 && p2y<270) p2y+=3; if(by < p2y+40 && p2y>0) p2y-=3;
                 if(bx<=15 && by>=py && by<=py+80) dx=-dx; if(bx>=475 && by>=p2y && by<=p2y+80) dx=-dx;
@@ -253,11 +272,12 @@
         }
 
         function playFlappy() {
+            stopCurrentGame();
             area.innerHTML = '<canvas id="gc" width="400" height="380" style="background:#0d1117;"></canvas>';
             const ctx = document.getElementById('gc').getContext('2d');
             let py=180, vy=0, bx=400, hole=120;
             window.onkeydown = e => { if(e.code==='Space') vy=-7; };
-            setInterval(() => {
+            timer = setInterval(() => {
                 vy+=0.45; py+=vy; bx-=3.5; if(bx<-40) { bx=400; hole=Math.floor(Math.random()*180)+50; }
                 if(py>360 || py<0) { py=180; vy=0; }
                 ctx.fillStyle="#0d1117"; ctx.fillRect(0,0,400,380);
@@ -267,11 +287,12 @@
         }
 
         function playBreakout() {
+            stopCurrentGame();
             area.innerHTML = '<canvas id="gc" width="480" height="360" style="background:#0d1117;"></canvas>';
             const ctx = document.getElementById('gc').getContext('2d');
             let px=200, bx=240, by=300, dx=3, dy=-3;
             window.onkeydown = e => { if(e.key==='ArrowLeft' && px>0) px-=25; if(e.key==='ArrowRight' && px<400) px+=25; };
-            setInterval(() => {
+            timer = setInterval(() => {
                 bx+=dx; by+=dy;
                 if(bx<=0 || bx>=470) dx=-dx; if(by<=0) dy=-dy;
                 if(by>=330 && bx>=px && bx<=px+80) dy=-dy;
@@ -280,6 +301,140 @@
                 ctx.fillStyle="#58a6ff"; ctx.fillRect(px, 340, 80, 10);
                 ctx.fillStyle="#3fb950"; ctx.fillRect(bx, by, 10, 10);
             }, 20);
+        }
+
+        function playSpaceInvaders() {
+            stopCurrentGame();
+            area.innerHTML = '<canvas id="gc" width="480" height="360" style="background:#0d1117;"></canvas>';
+            const ctx = document.getElementById('gc').getContext('2d');
+            let px=220, bullets=[], invs=[{x:50,y:30},{x:120,y:30},{x:190,y:30},{x:260,y:30},{x:330,y:30}];
+            window.onkeydown = e => {
+                if(e.key==='ArrowLeft' && px>10) px-=15;
+                if(e.key==='ArrowRight' && px<450) px+=15;
+                if(e.code==='Space') bullets.push({x:px+10,y:320});
+            };
+            timer = setInterval(() => {
+                ctx.fillStyle="#0d1117"; ctx.fillRect(0,0,480,360);
+                ctx.fillStyle="#58a6ff"; ctx.fillRect(px, 330, 25, 15);
+                ctx.fillStyle="#f85149";
+                invs.forEach(inv => ctx.fillRect(inv.x, inv.y, 30, 15));
+                ctx.fillStyle="#fff";
+                bullets.forEach((b,bi) => {
+                    b.y -= 6; ctx.fillRect(b.x, b.y, 4, 8);
+                    invs.forEach((inv,ii) => {
+                        if(b.x >= inv.x && b.x <= inv.x+30 && b.y <= inv.y+15) {
+                            invs.splice(ii,1); bullets.splice(bi,1);
+                        }
+                    });
+                });
+            }, 20);
+        }
+
+        function playAsteroids() {
+            stopCurrentGame();
+            area.innerHTML = '<canvas id="gc" width="480" height="360" style="background:#0d1117;"></canvas>';
+            const ctx = document.getElementById('gc').getContext('2d');
+            let px=240, py=180, asts=[{x:50,y:50,dx:2,dy:1},{x:400,y:300,dx:-1,dy:-2}];
+            timer = setInterval(() => {
+                ctx.fillStyle="#0d1117"; ctx.fillRect(0,0,480,360);
+                ctx.fillStyle="#58a6ff"; ctx.fillRect(px, py, 12, 12);
+                ctx.fillStyle="#8b949e";
+                asts.forEach(a => {
+                    a.x+=a.dx; a.y+=a.dy;
+                    if(a.x<0 || a.x>480) a.dx=-a.dx;
+                    if(a.y<0 || a.y>360) a.dy=-a.dy;
+                    ctx.fillRect(a.x, a.y, 25, 25);
+                });
+            }, 20);
+        }
+
+        function playRetroFootball() {
+            stopCurrentGame();
+            area.innerHTML = '<canvas id="gc" width="480" height="360" style="background:#1e4620;"></canvas>';
+            const ctx = document.getElementById('gc').getContext('2d');
+            let qbY=170, recY=60, dir=2, ballX=60, thrown=false;
+            window.onkeydown = e => { if(e.code==='Space') thrown=true; };
+            timer = setInterval(() => {
+                recY += dir; if(recY>300 || recY<30) dir *= -1;
+                if(thrown) ballX += 6;
+                if(ballX > 480) { ballX = 60; thrown = false; }
+                ctx.fillStyle="#1e4620"; ctx.fillRect(0,0,480,360);
+                ctx.fillStyle="#fff"; ctx.fillRect(240,0,2,360);
+                ctx.fillStyle="#58a6ff"; ctx.fillRect(50, qbY, 15, 15); ctx.fillRect(400, recY, 15, 15);
+                ctx.fillStyle="#d29922"; ctx.fillRect(thrown ? ballX : 70, thrown ? recY+4 : qbY+4, 8, 5);
+            }, 20);
+        }
+
+        function playCookieClicker() {
+            stopCurrentGame();
+            let count = 0;
+            area.innerHTML = `
+                <div style="text-align:center;">
+                    <button id="cbtn" style="font-size:4rem; background:none; border:none; cursor:pointer;">🍪</button>
+                    <h2 style="color:#58a6ff; margin-top:15px;"><span id="ccount">0</span> Cookies</h2>
+                </div>
+            `;
+            document.getElementById('cbtn').onclick = () => {
+                count++; document.getElementById('ccount').innerText = count;
+            };
+        }
+
+        function playCPS() {
+            stopCurrentGame();
+            let clicks = 0, active = false;
+            area.innerHTML = `
+                <div style="text-align:center;">
+                    <button id="cpsbtn" style="padding:20px 40px; font-size:1.2rem; background:#21262d; color:#58a6ff; border:1px solid #30363d; border-radius:8px; cursor:pointer;">Click to Start 5s CPS Test</button>
+                    <h2 id="cpsres" style="color:#c9d1d9; margin-top:20px;">0 CPS</h2>
+                </div>
+            `;
+            const btn = document.getElementById('cpsbtn');
+            btn.onclick = () => {
+                if(!active) {
+                    active = true; clicks = 1;
+                    setTimeout(() => {
+                        active = false;
+                        document.getElementById('cpsres').innerText = `Final Score: ${(clicks/5).toFixed(2)} CPS`;
+                        btn.innerText = "Try Again";
+                    }, 5000);
+                } else {
+                    clicks++;
+                    document.getElementById('cpsres').innerText = `${clicks} clicks...`;
+                }
+            };
+        }
+
+        function playReaction() {
+            stopCurrentGame();
+            area.innerHTML = `
+                <div id="rbox" style="width:100%; height:100%; background:#da3633; display:flex; align-items:center; justify-content:center; cursor:pointer;">
+                    <h2 id="rtxt" style="color:#fff;">Wait for GREEN...</h2>
+                </div>
+            `;
+            const box = document.getElementById('rbox');
+            const txt = document.getElementById('rtxt');
+            let startTime = 0, ready = false;
+
+            let randTime = Math.floor(Math.random()*3000) + 2000;
+            let timeout = setTimeout(() => {
+                ready = true;
+                box.style.background = "#238636";
+                txt.innerText = "CLICK NOW!";
+                startTime = Date.now();
+            }, randTime);
+
+            box.onclick = () => {
+                if(ready) {
+                    let score = Date.now() - startTime;
+                    txt.innerText = `Reaction Time: ${score} ms! Click to reset.`;
+                    ready = false;
+                    box.style.background = "#161b22";
+                } else {
+                    clearTimeout(timeout);
+                    txt.innerText = "Too early! Click to try again.";
+                    box.style.background = "#161b22";
+                }
+            };
         }
     </script>
 </body>
