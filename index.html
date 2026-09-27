@@ -19,7 +19,7 @@
             padding: 15px;
         }
 
-        .container { width: 100%; max-width: 1000px; }
+        .container { width: 100%; max-width: 1050px; }
 
         .top-bar {
             display: flex;
@@ -67,7 +67,7 @@
             background: #000;
             border: 1px solid #30363d;
             border-radius: 8px;
-            height: 520px;
+            height: 560px;
             width: 100%;
             display: flex;
             align-items: center;
@@ -90,7 +90,7 @@
 
         .cat-title {
             color: #58a6ff;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             text-transform: uppercase;
             letter-spacing: 1px;
             margin: 15px 0 10px 0;
@@ -100,7 +100,7 @@
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
             gap: 10px;
             margin-bottom: 15px;
         }
@@ -124,8 +124,11 @@
             color: #58a6ff;
         }
 
-        .btn-zelda { border-color: #2ea043; color: #3fb950; }
-        .btn-zelda:hover { background: #238636; color: #fff; }
+        .btn-android { border-color: #388e3c; color: #4caf50; }
+        .btn-android:hover { background: #2e7d32; color: #fff; }
+
+        .btn-zelda { border-color: #00897b; color: #26a69a; }
+        .btn-zelda:hover { background: #00695c; color: #fff; }
 
         .file-input { display: none; }
     </style>
@@ -135,7 +138,7 @@
     <div class="container">
         <!-- TOP CONTROLS & PANIC KEY INFO -->
         <div class="top-bar">
-            <h1>UNBLOCKED 76 HUB</h1>
+            <h1>UNBLOCKED 76 + ANDROID HUB</h1>
             <div class="panic-config">
                 <span>Panic Key: <b>~</b> or <b>Esc</b></span>
                 <select id="panic-target">
@@ -156,17 +159,19 @@
             </div>
         </div>
 
-        <!-- 1. ZELDA & RETRO ROM LOADERS -->
-        <div class="cat-title">Zelda & N64/GBA Engine (Direct Local Loader)</div>
+        <!-- 1. ANDROID GAMES & CLOUD EMULATOR -->
+        <div class="cat-title" style="color: #4caf50;">Android Mobile Games & Web Ports</div>
         <div class="grid">
-            <button class="btn btn-zelda" onclick="loadEmu('OoT')">Zelda: OoT</button>
-            <button class="btn btn-zelda" onclick="loadEmu('MM')">Zelda: MM</button>
-            <button class="btn btn-zelda" onclick="loadEmu('MinishCap')">Zelda: Minish Cap</button>
-            <button class="btn btn-zelda" onclick="triggerRomUpload()">Upload ROM File</button>
-            <input type="file" id="rom-file-input" class="file-input" accept=".z64,.n64,.v64,.gba" onchange="handleRomUpload(event)">
+            <button class="btn btn-android" onclick="loadGame('https://subwaysurfersgame.io')">Subway Surfers</button>
+            <button class="btn btn-android" onclick="loadGame('https://angrybirds.me')">Angry Birds</button>
+            <button class="btn btn-android" onclick="loadGame('https://fruitninja.io')">Fruit Ninja</button>
+            <button class="btn btn-android" onclick="loadGame('https://crossyroad.me')">Crossy Road</button>
+            <button class="btn btn-android" onclick="loadGame('https://flappybird.io')">Flappy Bird</button>
+            <button class="btn btn-android" onclick="loadGame('https://pacman256.io')">Pac-Man 256</button>
+            <button class="btn btn-android" onclick="loadEmuAndroid()">Android APK Cloud</button>
         </div>
 
-        <!-- 2. POPULAR 76 EMBEDS -->
+        <!-- 2. POPULAR UNBLOCKED 76 EMBEDS -->
         <div class="cat-title">Unblocked Hits (Embed Engine)</div>
         <div class="grid">
             <button class="btn" onclick="loadGame('https://game337331.konggames.com/gamez/0033/7331/live/index.html')">Slope</button>
@@ -176,14 +181,20 @@
             <button class="btn" onclick="loadGame('https://geometrydash.io')">Geometry Dash</button>
             <button class="btn" onclick="loadGame('https://tunnelrush.org')">Tunnel Rush</button>
             <button class="btn" onclick="loadGame('https://paperio2.com')">Paper.io 2</button>
-
             <button class="btn" onclick="loadGame('https://shellshock.io')">Shell Shockers</button>
-            <button class="btn" onclick="loadGame('https://crossyroad.me')">Crossy Road</button>
-
             <button class="btn" onclick="loadGame('https://drifthunters.org')">Drift Hunters</button>
-
             <button class="btn" onclick="loadGame('https://bitlifeonline.com')">BitLife</button>
             <button class="btn" onclick="loadGame('https://cluster-rush.com')">Cluster Rush</button>
+        </div>
+
+        <!-- 3. ZELDA & RETRO ENGINE -->
+        <div class="cat-title" style="color: #26a69a;">Zelda & Retro Engine</div>
+        <div class="grid">
+            <button class="btn btn-zelda" onclick="loadEmuRetro('OoT')">Zelda: OoT</button>
+            <button class="btn btn-zelda" onclick="loadEmuRetro('MM')">Zelda: MM</button>
+            <button class="btn btn-zelda" onclick="loadEmuRetro('MinishCap')">Zelda: Minish Cap</button>
+            <button class="btn btn-zelda" onclick="triggerRomUpload()">Upload ROM</button>
+            <input type="file" id="rom-file-input" class="file-input" accept=".z64,.n64,.v64,.gba" onchange="handleRomUpload(event)">
         </div>
     </div>
 
@@ -207,13 +218,26 @@
             viewportBox.innerHTML = `<iframe id="game-frame" src="${url}" allowfullscreen></iframe>`;
         }
 
-        /* RETRO EMULATOR ENGINE */
-        function loadEmu(game) {
+        /* ANDROID CLOUD EMULATOR LAUNCHER */
+        function loadEmuAndroid() {
             viewportBox.innerHTML = `
                 <div style="text-align: center; padding: 20px;">
-                    <h3 style="color: #2ea043; margin-bottom: 10px;">${game} Engine Ready</h3>
+                    <h3 style="color: #4caf50; margin-bottom: 10px;">Android Cloud Emulator</h3>
+                    <p style="color: #8b949e; font-size: 0.85rem; max-width: 450px; margin: 0 auto 15px auto;">
+                        Run custom Android apps and APKs using web-based cloud emulators (like ApkOnline or Appetize.io).
+                    </p>
+                    <button class="btn btn-android" style="padding: 10px 20px;" onclick="loadGame('https://www.apkonline.net/runandroid/android-online-emulator.html')">Launch Web Android OS</button>
+                </div>
+            `;
+        }
+
+        /* RETRO EMULATOR ENGINE */
+        function loadEmuRetro(game) {
+            viewportBox.innerHTML = `
+                <div style="text-align: center; padding: 20px;">
+                    <h3 style="color: #26a69a; margin-bottom: 10px;">${game} Engine Ready</h3>
                     <p style="color: #8b949e; font-size: 0.85rem; max-width: 400px; margin: 0 auto 15px auto;">
-                        To bypass school network blocks, click below to load your local <b>${game}</b> ROM file directly from your USB drive or local storage.
+                        Click below to load your local <b>${game}</b> ROM file directly from your storage.
                     </p>
                     <button class="btn btn-zelda" style="padding: 10px 20px;" onclick="triggerRomUpload()">Select ${game} ROM File</button>
                 </div>
@@ -229,11 +253,12 @@
             if (!file) return;
             viewportBox.innerHTML = `
                 <div style="text-align: center; padding: 20px;">
-                    <h3 style="color: #3fb950;">Loaded: ${file.name}</h3>
-                    <p style="color: #58a6ff; font-size: 0.85rem; margin-top: 10px;">ROM buffered in browser memory. Running 100% offline.</p>
+                    <h3 style="color: #26a69a;">Loaded: ${file.name}</h3>
+                    <p style="color: #58a6ff; font-size: 0.85rem; margin-top: 10px;">ROM buffered in browser memory. Running offline.</p>
                 </div>
             `;
         }
     </script>
 </body>
 </html>
+
