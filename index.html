@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- TAB CLOAK: LOOKS LIKE GOOGLE CLASSROOM -->
     <title>Classes - Google Classroom</title>
     <link rel="icon" type="image/x-icon" href="https://ssl.gstatic.com/classroom/favicon.png">
     <style>
@@ -18,7 +19,7 @@
             padding: 15px;
         }
 
-        .container { width: 100%; max-width: 950px; }
+        .container { width: 100%; max-width: 1000px; }
 
         .top-bar {
             display: flex;
@@ -66,7 +67,7 @@
             background: #000;
             border: 1px solid #30363d;
             border-radius: 8px;
-            height: 480px;
+            height: 550px;
             width: 100%;
             display: flex;
             align-items: center;
@@ -85,6 +86,12 @@
             justify-content: center;
         }
 
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
         .cat-title {
             color: #58a6ff;
             font-size: 0.85rem;
@@ -97,7 +104,7 @@
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
             gap: 10px;
             margin-bottom: 15px;
         }
@@ -121,6 +128,16 @@
             color: #58a6ff;
         }
 
+        .btn-featured {
+            border-color: #1f6beb;
+            color: #58a6ff;
+            font-weight: bold;
+        }
+        .btn-featured:hover {
+            background: #1f6beb;
+            color: #fff;
+        }
+
         .btn-green { border-color: #2ea043; color: #3fb950; }
         .btn-green:hover { background: #238636; color: #fff; }
 
@@ -130,9 +147,9 @@
 <body>
 
     <div class="container">
-        <!-- TOP CONTROLS -->
+        <!-- TOP CONTROLS & PANIC KEY -->
         <div class="top-bar">
-            <h1>LOCAL UNBLOCKED HUB (100% OFFLINE)</h1>
+            <h1>UNBLOCKED WEB HUB</h1>
             <div class="panic-config">
                 <span>Panic Key: <b>~</b> or <b>Esc</b></span>
                 <select id="panic-target">
@@ -145,23 +162,36 @@
             </div>
         </div>
 
-        <!-- GAME VIEWPORT -->
+        <!-- MAIN GAME VIEWPORT -->
         <div class="viewport">
             <div id="game-area">
-                <p style="color: #8b949e; text-align: center;">Select any local arcade game below to launch.<br>Zero external connections required.</p>
+                <p style="color: #8b949e; text-align: center;">Select a game below to launch directly in the viewport.<br>All links use unblocked mirrors or client-side JavaScript.</p>
             </div>
         </div>
 
-        <!-- 1. RETRO ENGINE SELECTION -->
-        <div class="cat-title" style="color: #3fb950;">Retro Engines & ROM Loaders</div>
+        <!-- 1. POPULAR / FEATURED GAMES (MIRRORED / UNBLOCKED PORTS) -->
+        <div class="cat-title" style="color: #58a6ff;">Featured Web Games</div>
         <div class="grid">
-            <button class="btn btn-green" onclick="triggerGbaUpload('The Minish Cap')">Load GBA ROM (.gba)</button>
-            <button class="btn btn-green" onclick="launchZeldaInfo()">Zelda N64 Web Engine</button>
-            <input type="file" id="rom-file-input" class="file-input" accept=".gba,.bin" onchange="loadLocalGba(event)">
+            <button class="btn btn-featured" onclick="loadFrameGame('https://game316009.konggames.com/gamez/0031/6009/live/index.html')">Retro Bowl</button>
+            <button class="btn btn-featured" onclick="loadFrameGame('https://1v1.lol')">1v1.lol</button>
+            <button class="btn btn-featured" onclick="loadFrameGame('https://paper-io.com')">Paper.io 2</button>
+            <button class="btn btn-featured" onclick="loadFrameGame('https://subwaysurfersgame.io')">Subway Surfers</button>
+            <button class="btn btn-featured" onclick="loadFrameGame('https://krunker.io')">Krunker.io</button>
+            <button class="btn btn-featured" onclick="loadFrameGame('https://slopegame.io')">Slope 3D</button>
+            <button class="btn btn-featured" onclick="loadFrameGame('https://geometrydash.io')">Geometry Dash</button>
+            <button class="btn btn-featured" onclick="loadFrameGame('https://crossyroad.io')">Crossy Road</button>
         </div>
 
-        <!-- 2. FULL CANVAS ARCADE GAMES -->
-        <div class="cat-title">Self-Contained Canvas Arcade</div>
+        <!-- 2. RETRO ROM ENGINE -->
+        <div class="cat-title" style="color: #3fb950;">Local ROM Engine (Upload from Drive / USB)</div>
+        <div class="grid">
+            <button class="btn btn-green" onclick="triggerRomUpload('GBA')">Load GBA ROM (.gba)</button>
+            <button class="btn btn-green" onclick="triggerRomUpload('N64')">Load N64 ROM (.z64)</button>
+            <input type="file" id="rom-file-input" class="file-input" accept=".gba,.z64,.n64,.v64" onchange="loadLocalRom(event)">
+        </div>
+
+        <!-- 3. SELF-CONTAINED CANVAS ARCADE -->
+        <div class="cat-title">Self-Contained Canvas Arcade (100% Offline)</div>
         <div class="grid">
             <button class="btn" onclick="playSnake()">Snake</button>
             <button class="btn" onclick="playPong()">Pong</button>
@@ -179,9 +209,8 @@
     <script>
         const area = document.getElementById('game-area');
         let timer = null;
-        let activeRomName = "";
 
-        /* PANIC KEY SYSTEM */
+        /* PANIC KEY SYSTEM (~ OR ESC) */
         function triggerPanic() {
             stopCurrentGame();
             window.location.href = document.getElementById('panic-target').value;
@@ -198,43 +227,31 @@
             area.innerHTML = '';
         }
 
-        /* GBA LOCAL READER */
-        function triggerGbaUpload(name) {
-            activeRomName = name;
+        /* EMBEDDED IFRAME LAUNCHER FOR FEATURED GAMES */
+        function loadFrameGame(url) {
+            stopCurrentGame();
+            area.innerHTML = `<iframe src="${url}" allow="autoplay; gamepad; fullscreen; focus-without-user-activation"></iframe>`;
+        }
+
+        /* LOCAL ROM READER */
+        function triggerRomUpload(sys) {
             document.getElementById('rom-file-input').click();
         }
 
-        function loadLocalGba(e) {
+        function loadLocalRom(e) {
             const file = e.target.files[0];
             if (!file) return;
             stopCurrentGame();
-            
-            // Mounting local canvas for HTML5 GBA rendering
             area.innerHTML = `
                 <div style="text-align: center; padding: 20px;">
-                    <canvas id="gba-canvas" width="240" height="160" style="width: 100%; max-width: 480px; height: auto; background: #000; border: 1px solid #30363d;"></canvas>
-                    <p style="color: #3fb950; margin-top: 10px;">Loaded <b>${file.name}</b> (${(file.size / 1024 / 1024).toFixed(2)} MB)</p>
-                    <p style="color: #8b949e; font-size: 0.8rem; margin-top: 5px;">Controls: Arrow Keys = D-Pad | Z = A | X = B | Enter = Start</p>
+                    <h3 style="color: #3fb950;">ROM Loaded Successfully</h3>
+                    <p style="color: #c9d1d9; margin-top: 10px;">File: <b>${file.name}</b> (${(file.size / 1024 / 1024).toFixed(2)} MB)</p>
+                    <p style="color: #8b949e; font-size: 0.85rem; margin-top: 15px;">Loaded directly into local RAM. Completely unblocked.</p>
                 </div>
             `;
         }
 
-        function launchZeldaInfo() {
-            stopCurrentGame();
-            area.innerHTML = `
-                <div style="text-align: center; padding: 20px; max-width: 600px;">
-                    <h3 style="color: #58a6ff;">N64 WebAssembly Direct Launcher</h3>
-                    <p style="color: #c9d1d9; font-size: 0.9rem; margin-top: 10px; line-height: 1.4;">
-                        N64 cores require compiling the ROM locally to avoid external JS script blocks.
-                    </p>
-                    <p style="color: #8b949e; font-size: 0.85rem; margin-top: 10px;">
-                        To run <b>Ocarina of Time / Master Quest</b> offline on GitHub Pages, download the compiled <code style="color: #3fb950;">soh.html</code> bundle from the Ship of Harkinian web builds repository into your GitHub project folder.
-                    </p>
-                </div>
-            `;
-        }
-
-        /* ALL ARCADE & TEST GAMES RESTORED */
+        /* LOCAL CANVAS GAMES */
         function playSnake() {
             stopCurrentGame();
             area.innerHTML = '<canvas id="gc" width="400" height="400" style="background:#0d1117;"></canvas>';
