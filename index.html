@@ -1,454 +1,266 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- TAB CLOAK: LOOKS LIKE GOOGLE CLASSROOM -->
-    <title>Classes - Google Classroom</title>
-    <link rel="icon" type="image/x-icon" href="https://ssl.gstatic.com/classroom/favicon.png">
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: #0d1117;
-            color: #c9d1d9;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 15px;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browser Arcade</title>
+  <style>
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --accent-color: #6366f1;
+      --accent-hover: #4f46e5;
+      --text-color: #f8fafc;
+      --text-muted: #94a3b8;
+    }
 
-        .container { width: 100%; max-width: 1000px; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #161b22;
-            border: 1px solid #30363d;
-            padding: 10px 18px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
-        .top-bar h1 { color: #58a6ff; font-size: 1.1rem; letter-spacing: 0.5px; }
+    header {
+      background-color: #0d1117;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #30363d;
+    }
 
-        .panic-config {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.85rem;
-            color: #8b949e;
-        }
+    header h1 {
+      font-size: 1.5rem;
+      color: var(--accent-color);
+    }
 
-        .panic-config select {
-            background: #0d1117;
-            color: #58a6ff;
-            border: 1px solid #30363d;
-            padding: 5px 8px;
-            border-radius: 4px;
-            outline: none;
-        }
+    .controls {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
 
-        .panic-btn {
-            background: #da3633;
-            color: #fff;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 0.8rem;
-        }
-        .panic-btn:hover { background: #f85149; }
+    input[type="text"], select {
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      border: 1px solid #30363d;
+      background-color: var(--card-bg);
+      color: var(--text-color);
+      outline: none;
+    }
 
-        .viewport {
-            background: #000;
-            border: 1px solid #30363d;
-            border-radius: 8px;
-            height: 550px;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            position: relative;
-            overflow: hidden;
-        }
+    main {
+      padding: 2rem;
+      flex: 1;
+    }
 
-        #game-area {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
 
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
+    .card {
+      background-color: var(--card-bg);
+      border-radius: 8px;
+      padding: 1.25rem;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      border: 1px solid #334155;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
 
-        .cat-title {
-            color: #58a6ff;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin: 15px 0 10px 0;
-            border-bottom: 1px solid #21262d;
-            padding-bottom: 4px;
-        }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+      border-color: var(--accent-color);
+    }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 10px;
-            margin-bottom: 15px;
-        }
+    .card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
 
-        .btn {
-            background: #161b22;
-            border: 1px solid #30363d;
-            color: #c9d1d9;
-            padding: 10px 6px;
-            border-radius: 6px;
-            font-weight: 500;
-            cursor: pointer;
-            text-align: center;
-            font-size: 0.8rem;
-            transition: 0.15s ease;
-            user-select: none;
-        }
-        .btn:hover {
-            border-color: #58a6ff;
-            background: #21262d;
-            color: #58a6ff;
-        }
+    .card span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      background-color: #0f172a;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      width: fit-content;
+    }
 
-        .btn-featured {
-            border-color: #1f6beb;
-            color: #58a6ff;
-            font-weight: bold;
-        }
-        .btn-featured:hover {
-            background: #1f6beb;
-            color: #fff;
-        }
+    /* Modal Overlay for Game Embed */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.85);
+      z-index: 1000;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
 
-        .btn-green { border-color: #2ea043; color: #3fb950; }
-        .btn-green:hover { background: #238636; color: #fff; }
+    .modal.active {
+      display: flex;
+    }
 
-        .file-input { display: none; }
-    </style>
+    .modal-header {
+      width: 90%;
+      max-width: 900px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .close-btn {
+      background-color: #ef4444;
+      color: white;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .iframe-container {
+      width: 90%;
+      max-width: 900px;
+      height: 80vh;
+      background-color: #000;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #334155;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- TOP CONTROLS & PANIC KEY -->
-        <div class="top-bar">
-            <h1>UNBLOCKED WEB HUB</h1>
-            <div class="panic-config">
-                <span>Panic Key: <b>~</b> or <b>Esc</b></span>
-                <select id="panic-target">
-                    <option value="https://classroom.google.com">Google Classroom</option>
-                    <option value="https://canvas.instructure.com">Canvas</option>
-                    <option value="https://docs.google.com">Google Docs</option>
-                    <option value="https://www.google.com">Google Search</option>
-                </select>
-                <button class="panic-btn" onclick="triggerPanic()">PANIC NOW</button>
-            </div>
-        </div>
-
-        <!-- MAIN GAME VIEWPORT -->
-        <div class="viewport">
-            <div id="game-area">
-                <p style="color: #8b949e; text-align: center;">Select a game below to launch directly in the viewport.<br>All games run locally inside your site code.</p>
-            </div>
-        </div>
-
-        <!-- 1. HOSTED GAMES (RUNS FROM YOUR REPO FOLDERS) -->
-        <div class="cat-title" style="color: #58a6ff;">Self-Hosted Big Games</div>
-        <div class="grid">
-            <button class="btn btn-featured" onclick="loadFrameGame('./games/retro-bowl/index.html')">Retro Bowl</button>
-            <button class="btn btn-featured" onclick="loadFrameGame('./games/1v1lol/index.html')">1v1.lol</button>
-            <button class="btn btn-featured" onclick="loadFrameGame('./games/paperio/index.html')">Paper.io 2</button>
-            <button class="btn btn-featured" onclick="loadFrameGame('./games/subway-surfers/index.html')">Subway Surfers</button>
-        </div>
-
-        <!-- 2. RETRO ROM ENGINE (100% UNBLOCKED LOCAL FILE READER) -->
-        <div class="cat-title" style="color: #3fb950;">Local ROM Player (Upload from USB / Drive)</div>
-        <div class="grid">
-            <button class="btn btn-green" onclick="triggerRomUpload('GBA')">Load GBA ROM (.gba)</button>
-            <button class="btn btn-green" onclick="triggerRomUpload('N64')">Load N64 ROM (.z64)</button>
-            <input type="file" id="rom-file-input" class="file-input" accept=".gba,.z64,.n64,.v64" onchange="loadLocalRom(event)">
-        </div>
-
-        <!-- 3. INSTANT CANVAS ARCADE GAMES -->
-        <div class="cat-title">Built-In Canvas Arcade (No External Files Needed)</div>
-        <div class="grid">
-            <button class="btn" onclick="playSnake()">Snake</button>
-            <button class="btn" onclick="playPong()">Pong</button>
-            <button class="btn" onclick="playFlappy()">Flappy Box</button>
-            <button class="btn" onclick="playBreakout()">Breakout</button>
-            <button class="btn" onclick="playSpaceInvaders()">Space Invaders</button>
-            <button class="btn" onclick="playAsteroids()">Asteroids</button>
-            <button class="btn" onclick="playRetroFootball()">Retro Football</button>
-            <button class="btn" onclick="playCookieClicker()">Cookie Clicker</button>
-            <button class="btn" onclick="playCPS()">CPS Test</button>
-            <button class="btn" onclick="playReaction()">Reaction Test</button>
-        </div>
+  <header>
+    <h1>Browser Arcade</h1>
+    <div class="controls">
+      <input type="text" id="search" placeholder="Search games..." oninput="filterGames()">
+      <select id="category" onchange="filterGames()">
+        <option value="all">All Categories</option>
+        <option value="Puzzle">Puzzle</option>
+        <option value="Arcade">Arcade</option>
+        <option value="Action">Action</option>
+      </select>
     </div>
+  </header>
 
-    <script>
-        const area = document.getElementById('game-area');
-        let timer = null;
+  <main>
+    <div class="grid" id="game-grid"></div>
+  </main>
 
-        /* PANIC KEY SYSTEM (~ OR ESC) */
-        function triggerPanic() {
-            stopCurrentGame();
-            window.location.href = document.getElementById('panic-target').value;
-        }
+  <!-- Game Modal -->
+  <div class="modal" id="game-modal">
+    <div class="modal-header">
+      <h2 id="modal-title">Playing Game</h2>
+      <button class="close-btn" onclick="closeGame()">Close Game ✕</button>
+    </div>
+    <div class="iframe-container">
+      <iframe id="game-frame" src="" allowfullscreen></iframe>
+    </div>
+  </div>
 
-        window.addEventListener('keydown', function(e) {
-            if (e.key === '`' || e.key === '~' || e.key === 'Escape') triggerPanic();
-        });
+  <script>
+    // Embedded game list (using open-source web games)
+    const games = [
+      {
+        title: "2048",
+        category: "Puzzle",
+        url: "https://play2048.co/"
+      },
+      {
+        title: "Hextris",
+        category: "Puzzle",
+        url: "https://hextris.io/"
+      },
+      {
+        title: "Pacman Canvas",
+        category: "Arcade",
+        url: "https://pacman-canvas.js.org/"
+      },
+      {
+        title: "Paper.io 2",
+        category: "Action",
+        url: "https://paper-io.com/"
+      }
+    ];
 
-        function stopCurrentGame() {
-            if (timer) clearInterval(timer);
-            window.onkeydown = null;
-            window.onkeyup = null;
-            area.innerHTML = '';
-        }
+    const grid = document.getElementById('game-grid');
+    const modal = document.getElementById('game-modal');
+    const frame = document.getElementById('game-frame');
+    const modalTitle = document.getElementById('modal-title');
 
-        /* EMBEDDED LOCAL GAME LAUNCHER */
-        function loadFrameGame(url) {
-            stopCurrentGame();
-            area.innerHTML = `<iframe src="${url}" allow="autoplay; gamepad; fullscreen"></iframe>`;
-        }
+    function renderGames(list) {
+      grid.innerHTML = '';
+      if (list.length === 0) {
+        grid.innerHTML = '<p style="color: var(--text-muted)">No games found.</p>';
+        return;
+      }
+      list.forEach(game => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.onclick = () => openGame(game.title, game.url);
+        card.innerHTML = `
+          <h3>${game.title}</h3>
+          <span>${game.category}</span>
+        `;
+        grid.appendChild(card);
+      });
+    }
 
-        /* LOCAL ROM READER */
-        function triggerRomUpload(sys) {
-            document.getElementById('rom-file-input').click();
-        }
+    function filterGames() {
+      const searchVal = document.getElementById('search').value.toLowerCase();
+      const catVal = document.getElementById('category').value;
 
-        function loadLocalRom(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            stopCurrentGame();
-            area.innerHTML = `
-                <div style="text-align: center; padding: 20px;">
-                    <h3 style="color: #3fb950;">ROM Loaded Successfully</h3>
-                    <p style="color: #c9d1d9; margin-top: 10px;">File: <b>${file.name}</b> (${(file.size / 1024 / 1024).toFixed(2)} MB)</p>
-                    <p style="color: #8b949e; font-size: 0.85rem; margin-top: 15px;">Loaded directly into local RAM. Unblocked.</p>
-                </div>
-            `;
-        }
+      const filtered = games.filter(game => {
+        const matchesSearch = game.title.toLowerCase().includes(searchVal);
+        const matchesCat = catVal === 'all' || game.category === catVal;
+        return matchesSearch && matchesCat;
+      });
 
-        /* LOCAL CANVAS GAMES */
-        function playSnake() {
-            stopCurrentGame();
-            area.innerHTML = '<canvas id="gc" width="400" height="400" style="background:#0d1117;"></canvas>';
-            const ctx = document.getElementById('gc').getContext('2d');
-            let px=10, py=10, gs=20, tc=20, ax=15, ay=15, xv=1, yv=0, trail=[], tail=5;
-            window.onkeydown = e => {
-                if(e.key==='ArrowLeft' && xv!==1) {xv=-1;yv=0;} if(e.key==='ArrowUp' && yv!==1) {xv=0;yv=-1;}
-                if(e.key==='ArrowRight' && xv!==-1) {xv=1;yv=0;} if(e.key==='ArrowDown' && yv!==-1) {xv=0;yv=1;}
-            };
-            timer = setInterval(() => {
-                px+=xv; py+=yv; if(px<0) px=tc-1; if(px>tc-1) px=0; if(py<0) py=tc-1; if(py>tc-1) py=0;
-                ctx.fillStyle="#0d1117"; ctx.fillRect(0,0,400,400);
-                ctx.fillStyle="#58a6ff"; for(let i=0;i<trail.length;i++) { ctx.fillRect(trail[i].x*gs, trail[i].y*gs, gs-2, gs-2); }
-                trail.push({x:px,y:py}); while(trail.length>tail) trail.shift();
-                if(ax===px && ay===py) { tail++; ax=Math.floor(Math.random()*tc); ay=Math.floor(Math.random()*tc); }
-                ctx.fillStyle="#f85149"; ctx.fillRect(ax*gs, ay*gs, gs-2, gs-2);
-            }, 80);
-        }
+      renderGames(filtered);
+    }
 
-        function playPong() {
-            stopCurrentGame();
-            area.innerHTML = '<canvas id="gc" width="500" height="350" style="background:#0d1117;"></canvas>';
-            const ctx = document.getElementById('gc').getContext('2d');
-            let py=140, p2y=140, bx=250, by=175, dx=4, dy=4;
-            window.onkeydown = e => { if(e.key==='ArrowUp' && py>0) py-=25; if(e.key==='ArrowDown' && py<270) py+=25; };
-            timer = setInterval(() => {
-                bx+=dx; by+=dy; if(by<=0 || by>=340) dy=-dy;
-                if(by > p2y+40 && p2y<270) p2y+=3; if(by < p2y+40 && p2y>0) p2y-=3;
-                if(bx<=15 && by>=py && by<=py+80) dx=-dx; if(bx>=475 && by>=p2y && by<=p2y+80) dx=-dx;
-                if(bx<0 || bx>500) { bx=250; by=175; }
-                ctx.fillStyle="#0d1117"; ctx.fillRect(0,0,500,350);
-                ctx.fillStyle="#58a6ff"; ctx.fillRect(5, py, 10, 80); ctx.fillRect(485, p2y, 10, 80);
-                ctx.fillStyle="#fff"; ctx.beginPath(); ctx.arc(bx, by, 7, 0, Math.PI*2); ctx.fill();
-            }, 20);
-        }
+    function openGame(title, url) {
+      modalTitle.innerText = title;
+      frame.src = url;
+      modal.classList.add('active');
+    }
 
-        function playFlappy() {
-            stopCurrentGame();
-            area.innerHTML = '<canvas id="gc" width="400" height="380" style="background:#0d1117;"></canvas>';
-            const ctx = document.getElementById('gc').getContext('2d');
-            let py=180, vy=0, bx=400, hole=120;
-            window.onkeydown = e => { if(e.code==='Space') vy=-7; };
-            timer = setInterval(() => {
-                vy+=0.45; py+=vy; bx-=3.5; if(bx<-40) { bx=400; hole=Math.floor(Math.random()*180)+50; }
-                if(py>360 || py<0) { py=180; vy=0; }
-                ctx.fillStyle="#0d1117"; ctx.fillRect(0,0,400,380);
-                ctx.fillStyle="#58a6ff"; ctx.fillRect(50, py, 20, 20);
-                ctx.fillStyle="#f85149"; ctx.fillRect(bx, 0, 35, hole); ctx.fillRect(bx, hole+110, 35, 380-(hole+110));
-            }, 20);
-        }
+    function closeGame() {
+      modal.classList.remove('active');
+      frame.src = '';
+    }
 
-        function playBreakout() {
-            stopCurrentGame();
-            area.innerHTML = '<canvas id="gc" width="480" height="360" style="background:#0d1117;"></canvas>';
-            const ctx = document.getElementById('gc').getContext('2d');
-            let px=200, bx=240, by=300, dx=3, dy=-3;
-            window.onkeydown = e => { if(e.key==='ArrowLeft' && px>0) px-=25; if(e.key==='ArrowRight' && px<400) px+=25; };
-            timer = setInterval(() => {
-                bx+=dx; by+=dy;
-                if(bx<=0 || bx>=470) dx=-dx; if(by<=0) dy=-dy;
-                if(by>=330 && bx>=px && bx<=px+80) dy=-dy;
-                if(by>360) { bx=240; by=300; dy=-3; }
-                ctx.fillStyle="#0d1117"; ctx.fillRect(0,0,480,360);
-                ctx.fillStyle="#58a6ff"; ctx.fillRect(px, 340, 80, 10);
-                ctx.fillStyle="#3fb950"; ctx.fillRect(bx, by, 10, 10);
-            }, 20);
-        }
+    // Initial Load
+    renderGames(games);
+  </script>
 
-        function playSpaceInvaders() {
-            stopCurrentGame();
-            area.innerHTML = '<canvas id="gc" width="480" height="360" style="background:#0d1117;"></canvas>';
-            const ctx = document.getElementById('gc').getContext('2d');
-            let px=220, bullets=[], invs=[{x:50,y:30},{x:120,y:30},{x:190,y:30},{x:260,y:30},{x:330,y:30}];
-            window.onkeydown = e => {
-                if(e.key==='ArrowLeft' && px>10) px-=15;
-                if(e.key==='ArrowRight' && px<450) px+=15;
-                if(e.code==='Space') bullets.push({x:px+10,y:320});
-            };
-            timer = setInterval(() => {
-                ctx.fillStyle="#0d1117"; ctx.fillRect(0,0,480,360);
-                ctx.fillStyle="#58a6ff"; ctx.fillRect(px, 330, 25, 15);
-                ctx.fillStyle="#f85149";
-                invs.forEach(inv => ctx.fillRect(inv.x, inv.y, 30, 15));
-                ctx.fillStyle="#fff";
-                bullets.forEach((b,bi) => {
-                    b.y -= 6; ctx.fillRect(b.x, b.y, 4, 8);
-                    invs.forEach((inv,ii) => {
-                        if(b.x >= inv.x && b.x <= inv.x+30 && b.y <= inv.y+15) {
-                            invs.splice(ii,1); bullets.splice(bi,1);
-                        }
-                    });
-                });
-            }, 20);
-        }
-
-        function playAsteroids() {
-            stopCurrentGame();
-            area.innerHTML = '<canvas id="gc" width="480" height="360" style="background:#0d1117;"></canvas>';
-            const ctx = document.getElementById('gc').getContext('2d');
-            let px=240, py=180, asts=[{x:50,y:50,dx:2,dy:1},{x:400,y:300,dx:-1,dy:-2}];
-            timer = setInterval(() => {
-                ctx.fillStyle="#0d1117"; ctx.fillRect(0,0,480,360);
-                ctx.fillStyle="#58a6ff"; ctx.fillRect(px, py, 12, 12);
-                ctx.fillStyle="#8b949e";
-                asts.forEach(a => {
-                    a.x+=a.dx; a.y+=a.dy;
-                    if(a.x<0 || a.x>480) a.dx=-a.dx;
-                    if(a.y<0 || a.y>360) a.dy=-a.dy;
-                    ctx.fillRect(a.x, a.y, 25, 25);
-                });
-            }, 20);
-        }
-
-        function playRetroFootball() {
-            stopCurrentGame();
-            area.innerHTML = '<canvas id="gc" width="480" height="360" style="background:#1e4620;"></canvas>';
-            const ctx = document.getElementById('gc').getContext('2d');
-            let qbY=170, recY=60, dir=2, ballX=60, thrown=false;
-            window.onkeydown = e => { if(e.code==='Space') thrown=true; };
-            timer = setInterval(() => {
-                recY += dir; if(recY>300 || recY<30) dir *= -1;
-                if(thrown) ballX += 6;
-                if(ballX > 480) { ballX = 60; thrown = false; }
-                ctx.fillStyle="#1e4620"; ctx.fillRect(0,0,480,360);
-                ctx.fillStyle="#fff"; ctx.fillRect(240,0,2,360);
-                ctx.fillStyle="#58a6ff"; ctx.fillRect(50, qbY, 15, 15); ctx.fillRect(400, recY, 15, 15);
-                ctx.fillStyle="#d29922"; ctx.fillRect(thrown ? ballX : 70, thrown ? recY+4 : qbY+4, 8, 5);
-            }, 20);
-        }
-
-        function playCookieClicker() {
-            stopCurrentGame();
-            let count = 0;
-            area.innerHTML = `
-                <div style="text-align:center;">
-                    <button id="cbtn" style="font-size:4rem; background:none; border:none; cursor:pointer;">🍪</button>
-                    <h2 style="color:#58a6ff; margin-top:15px;"><span id="ccount">0</span> Cookies</h2>
-                </div>
-            `;
-            document.getElementById('cbtn').onclick = () => {
-                count++; document.getElementById('ccount').innerText = count;
-            };
-        }
-
-        function playCPS() {
-            stopCurrentGame();
-            let clicks = 0, active = false;
-            area.innerHTML = `
-                <div style="text-align:center;">
-                    <button id="cpsbtn" style="padding:20px 40px; font-size:1.2rem; background:#21262d; color:#58a6ff; border:1px solid #30363d; border-radius:8px; cursor:pointer;">Click to Start 5s CPS Test</button>
-                    <h2 id="cpsres" style="color:#c9d1d9; margin-top:20px;">0 CPS</h2>
-                </div>
-            `;
-            const btn = document.getElementById('cpsbtn');
-            btn.onclick = () => {
-                if(!active) {
-                    active = true; clicks = 1;
-                    setTimeout(() => {
-                        active = false;
-                        document.getElementById('cpsres').innerText = `Final Score: ${(clicks/5).toFixed(2)} CPS`;
-                        btn.innerText = "Try Again";
-                    }, 5000);
-                } else {
-                    clicks++;
-                    document.getElementById('cpsres').innerText = `${clicks} clicks...`;
-                }
-            };
-        }
-
-        function playReaction() {
-            stopCurrentGame();
-            area.innerHTML = `
-                <div id="rbox" style="width:100%; height:100%; background:#da3633; display:flex; align-items:center; justify-content:center; cursor:pointer;">
-                    <h2 id="rtxt" style="color:#fff;">Wait for GREEN...</h2>
-                </div>
-            `;
-            const box = document.getElementById('rbox');
-            const txt = document.getElementById('rtxt');
-            let startTime = 0, ready = false;
-
-            let randTime = Math.floor(Math.random()*3000) + 2000;
-            let timeout = setTimeout(() => {
-                ready = true;
-                box.style.background = "#238636";
-                txt.innerText = "CLICK NOW!";
-                startTime = Date.now();
-            }, randTime);
-
-            box.onclick = () => {
-                if(ready) {
-                    let score = Date.now() - startTime;
-                    txt.innerText = `Reaction Time: ${score} ms! Click to reset.`;
-                    ready = false;
-                    box.style.background = "#161b22";
-                } else {
-                    clearTimeout(timeout);
-                    txt.innerText = "Too early! Click to try again.";
-                    box.style.background = "#161b22";
-                }
-            };
-        }
-    </script>
 </body>
 </html>
