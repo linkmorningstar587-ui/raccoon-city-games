@@ -165,33 +165,29 @@
         <!-- MAIN GAME VIEWPORT -->
         <div class="viewport">
             <div id="game-area">
-                <p style="color: #8b949e; text-align: center;">Select a game below to launch directly in the viewport.<br>All links use unblocked mirrors or client-side JavaScript.</p>
+                <p style="color: #8b949e; text-align: center;">Select a game below to launch directly in the viewport.<br>All games run locally inside your site code.</p>
             </div>
         </div>
 
-        <!-- 1. POPULAR / FEATURED GAMES (MIRRORED / UNBLOCKED PORTS) -->
-        <div class="cat-title" style="color: #58a6ff;">Featured Web Games</div>
+        <!-- 1. HOSTED GAMES (RUNS FROM YOUR REPO FOLDERS) -->
+        <div class="cat-title" style="color: #58a6ff;">Self-Hosted Big Games</div>
         <div class="grid">
-            <button class="btn btn-featured" onclick="loadFrameGame('https://game316009.konggames.com/gamez/0031/6009/live/index.html')">Retro Bowl</button>
-            <button class="btn btn-featured" onclick="loadFrameGame('https://1v1.lol')">1v1.lol</button>
-            <button class="btn btn-featured" onclick="loadFrameGame('https://paper-io.com')">Paper.io 2</button>
-            <button class="btn btn-featured" onclick="loadFrameGame('https://subwaysurfersgame.io')">Subway Surfers</button>
-            <button class="btn btn-featured" onclick="loadFrameGame('https://krunker.io')">Krunker.io</button>
-            <button class="btn btn-featured" onclick="loadFrameGame('https://slopegame.io')">Slope 3D</button>
-            <button class="btn btn-featured" onclick="loadFrameGame('https://geometrydash.io')">Geometry Dash</button>
-            <button class="btn btn-featured" onclick="loadFrameGame('https://crossyroad.io')">Crossy Road</button>
+            <button class="btn btn-featured" onclick="loadFrameGame('./games/retro-bowl/index.html')">Retro Bowl</button>
+            <button class="btn btn-featured" onclick="loadFrameGame('./games/1v1lol/index.html')">1v1.lol</button>
+            <button class="btn btn-featured" onclick="loadFrameGame('./games/paperio/index.html')">Paper.io 2</button>
+            <button class="btn btn-featured" onclick="loadFrameGame('./games/subway-surfers/index.html')">Subway Surfers</button>
         </div>
 
-        <!-- 2. RETRO ROM ENGINE -->
-        <div class="cat-title" style="color: #3fb950;">Local ROM Engine (Upload from Drive / USB)</div>
+        <!-- 2. RETRO ROM ENGINE (100% UNBLOCKED LOCAL FILE READER) -->
+        <div class="cat-title" style="color: #3fb950;">Local ROM Player (Upload from USB / Drive)</div>
         <div class="grid">
             <button class="btn btn-green" onclick="triggerRomUpload('GBA')">Load GBA ROM (.gba)</button>
             <button class="btn btn-green" onclick="triggerRomUpload('N64')">Load N64 ROM (.z64)</button>
             <input type="file" id="rom-file-input" class="file-input" accept=".gba,.z64,.n64,.v64" onchange="loadLocalRom(event)">
         </div>
 
-        <!-- 3. SELF-CONTAINED CANVAS ARCADE -->
-        <div class="cat-title">Self-Contained Canvas Arcade (100% Offline)</div>
+        <!-- 3. INSTANT CANVAS ARCADE GAMES -->
+        <div class="cat-title">Built-In Canvas Arcade (No External Files Needed)</div>
         <div class="grid">
             <button class="btn" onclick="playSnake()">Snake</button>
             <button class="btn" onclick="playPong()">Pong</button>
@@ -227,10 +223,10 @@
             area.innerHTML = '';
         }
 
-        /* EMBEDDED IFRAME LAUNCHER FOR FEATURED GAMES */
+        /* EMBEDDED LOCAL GAME LAUNCHER */
         function loadFrameGame(url) {
             stopCurrentGame();
-            area.innerHTML = `<iframe src="${url}" allow="autoplay; gamepad; fullscreen; focus-without-user-activation"></iframe>`;
+            area.innerHTML = `<iframe src="${url}" allow="autoplay; gamepad; fullscreen"></iframe>`;
         }
 
         /* LOCAL ROM READER */
@@ -246,7 +242,7 @@
                 <div style="text-align: center; padding: 20px;">
                     <h3 style="color: #3fb950;">ROM Loaded Successfully</h3>
                     <p style="color: #c9d1d9; margin-top: 10px;">File: <b>${file.name}</b> (${(file.size / 1024 / 1024).toFixed(2)} MB)</p>
-                    <p style="color: #8b949e; font-size: 0.85rem; margin-top: 15px;">Loaded directly into local RAM. Completely unblocked.</p>
+                    <p style="color: #8b949e; font-size: 0.85rem; margin-top: 15px;">Loaded directly into local RAM. Unblocked.</p>
                 </div>
             `;
         }
