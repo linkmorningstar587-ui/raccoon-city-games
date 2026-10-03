@@ -1,176 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GitHub Arcade (230+ Games)</title>
-  <style>
-    :root {
-      --bg-color: #0f172a;
-      --card-bg: #1e293b;
-      --accent-color: #6366f1;
-      --text-color: #f8fafc;
-      --text-muted: #94a3b8;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unblocked Arcade Hub</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, sans-serif; }
-    body { background-color: var(--bg-color); color: var(--text-color); min-height: 100vh; display: flex; flex-direction: column; }
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
 
-    header {
-      background-color: #0d1117;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid #30363d;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
+        /* Sidebar Navigation */
+        #sidebar {
+            width: 280px;
+            background-color: #1e293b;
+            border-right: 1px solid #334155;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 15px;
+            gap: 15px;
+        }
 
-    header h1 { font-size: 1.5rem; color: var(--accent-color); }
+        #sidebar h1 {
+            font-size: 1.2rem;
+            color: #38bdf8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #334155;
+        }
 
-    .controls { display: flex; gap: 0.75rem; align-items: center; }
+        .category-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: #94a3b8;
+            margin-top: 10px;
+            font-weight: bold;
+        }
 
-    input[type="text"], select {
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      border: 1px solid #30363d;
-      background-color: var(--card-bg);
-      color: var(--text-color);
-      outline: none;
-    }
+        .game-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            overflow-y: auto;
+        }
 
-    main { padding: 2rem; flex: 1; }
+        .game-btn {
+            background-color: #334155;
+            color: #f8fafc;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 6px;
+            text-align: left;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
 
-    .stats-bar {
-      margin-bottom: 1.5rem;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
+        .game-btn:hover, .game-btn.active {
+            background-color: #0284c7;
+            color: #ffffff;
+            font-weight: bold;
+        }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1.25rem;
-    }
+        /* Game Main Display Area */
+        #content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #020617;
+        }
 
-    .card {
-      background-color: var(--card-bg);
-      border-radius: 8px;
-      padding: 1rem;
-      text-decoration: none;
-      color: inherit;
-      border: 1px solid #334155;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      transition: transform 0.15s, border-color 0.15s;
-    }
+        #topbar {
+            height: 50px;
+            background-color: #0f172a;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
 
-    .card:hover {
-      transform: translateY(-3px);
-      border-color: var(--accent-color);
-    }
+        #game-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
 
-    .card h3 { font-size: 1rem; margin-bottom: 0.5rem; }
+        .controls {
+            display: flex;
+            gap: 10px;
+        }
 
-    .card span {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      background-color: #0f172a;
-      padding: 0.2rem 0.5rem;
-      border-radius: 4px;
-      width: fit-content;
-    }
-  </style>
+        .ctrl-btn {
+            background-color: #334155;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .ctrl-btn:hover {
+            background-color: #475569;
+        }
+
+        #game-frame {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            border: none;
+            background-color: #000;
+        }
+    </style>
 </head>
 <body>
 
-  <header>
-    <h1>Browser Arcade</h1>
-    <div class="controls">
-      <input type="text" id="search" placeholder="Search 230+ games..." oninput="filterGames()">
-      <select id="category" onchange="filterGames()">
-        <option value="all">All Categories</option>
-        <option value="Arcade">Arcade</option>
-        <option value="Puzzle">Puzzle</option>
-        <option value="Action">Action</option>
-        <option value="Sports">Sports</option>
-        <option value="Retro">Retro</option>
-      </select>
+    <div id="sidebar">
+        <h1>Arcade Hub</h1>
+        
+        <div class="category-title">Featured</div>
+        <button class="game-btn active" onclick="loadGame('https://eaglercraft.com/mc/1.8.8/', 'Eaglercraft 1.8.8')">Eaglercraft 1.8.8</button>
+
+        <div class="category-title">Action & Driving</div>
+        <button class="game-btn" onclick="loadGame('https://3kho.github.io/projects/slope/index.html', 'Slope')">Slope</button>
+        <button class="game-btn" onclick="loadGame('https://3kho.github.io/projects/drift-hunters/index.html', 'Drift Hunters')">Drift Hunters</button>
+        <button class="game-btn" onclick="loadGame('https://3kho.github.io/projects/moto-x3m/index.html', 'Moto X3M')">Moto X3M</button>
+        <button class="game-btn" onclick="loadGame('https://3kho.github.io/projects/vex7/index.html', 'Vex 7')">Vex 7</button>
+
+        <div class="category-title">Strategy & Casual</div>
+        <button class="game-btn" onclick="loadGame('https://3kho.github.io/projects/retro-bowl/index.html', 'Retro Bowl')">Retro Bowl</button>
+        <button class="game-btn" onclick="loadGame('https://3kho.github.io/projects/btd5/index.html', 'Bloons TD 5')">Bloons TD 5</button>
+        <button class="game-btn" onclick="loadGame('https://3kho.github.io/projects/bitlife/index.html', 'BitLife')">BitLife</button>
+
+        <div class="category-title">Multiplayer & Shooter</div>
+        <button class="game-btn" onclick="loadGame('https://3kho.github.io/projects/1v1.lol/index.html', '1v1.LOL')">1v1.LOL</button>
+        <button class="game-btn" onclick="loadGame('https://shellshock.io', 'Shell Shockers')">Shell Shockers</button>
+        <button class="game-btn" onclick="loadGame('https://smashkarts.io', 'Smash Karts')">Smash Karts</button>
     </div>
-  </header>
 
-  <main>
-    <div class="stats-bar" id="stats">Showing 0 games</div>
-    <div class="grid" id="game-grid"></div>
-  </main>
+    <div id="content">
+        <div id="topbar">
+            <div id="game-title">Eaglercraft 1.8.8</div>
+            <div class="controls">
+                <button class="ctrl-btn" onclick="reloadGame()">Reload Game</button>
+                <button class="ctrl-btn" onclick="toggleFullscreen()">Fullscreen</button>
+            </div>
+        </div>
+        <iframe id="game-frame" src="https://eaglercraft.com/mc/1.8.8/" allowfullscreen></iframe>
+    </div>
 
-  <script>
-    // Generate 230 catalog items dynamically
-    const categories = ["Arcade", "Puzzle", "Action", "Sports", "Retro"];
-    
-    // Core custom playable engines built into game.html
-    const builtInGames = ["snake", "space-invaders", "flappy-square", "pong", "breakout", "tic-tac-toe", "memory-match"];
+    <script>
+        const iframe = document.getElementById('game-frame');
+        const titleDisplay = document.getElementById('game-title');
+        const buttons = document.querySelectorAll('.game-btn');
 
-    const games = [];
+        function loadGame(url, name) {
+            iframe.src = url;
+            titleDisplay.innerText = name;
 
-    // 1. Add core playable titles
-    builtInGames.forEach(id => {
-      const formattedTitle = id.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-      games.push({ id: id, title: formattedTitle, category: "Arcade" });
-    });
+            buttons.forEach(btn => {
+                if(btn.innerText === name) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
 
-    // 2. Populate up to 230 entries across categories
-    for (let i = games.length + 1; i <= 230; i++) {
-      const cat = categories[i % categories.length];
-      games.push({
-        id: `game-${i}`,
-        title: `${cat} Challenge ${i}`,
-        category: cat
-      });
-    }
+        function reloadGame() {
+            iframe.src = iframe.src;
+        }
 
-    const grid = document.getElementById('game-grid');
-    const stats = document.getElementById('stats');
-
-    function renderGames(list) {
-      grid.innerHTML = '';
-      stats.innerText = `Showing ${list.length} games`;
-
-      if (list.length === 0) {
-        grid.innerHTML = '<p style="color: var(--text-muted)">No games match your search.</p>';
-        return;
-      }
-
-      list.forEach(game => {
-        const card = document.createElement('a');
-        card.className = 'card';
-        card.href = `./game.html?id=${game.id}`;
-        card.innerHTML = `
-          <h3>${game.title}</h3>
-          <span>${game.category}</span>
-        `;
-        grid.appendChild(card);
-      });
-    }
-
-    function filterGames() {
-      const searchVal = document.getElementById('search').value.toLowerCase();
-      const catVal = document.getElementById('category').value;
-
-      const filtered = games.filter(game => {
-        const matchesSearch = game.title.toLowerCase().includes(searchVal);
-        const matchesCat = catVal === 'all' || game.category === catVal;
-        return matchesSearch && matchesCat;
-      });
-
-      renderGames(filtered);
-    }
-
-    // Initial Load
-    renderGames(games);
-  </script>
-
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                iframe.requestFullscreen().catch(err => {
+                    alert(`Error trying to enable full-screen mode: ${err.message}`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+    </script>
 </body>
 </html>
