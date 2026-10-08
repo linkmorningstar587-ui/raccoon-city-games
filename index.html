@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unblocked Arcade Hub</title>
+    <title>Unblocked Arcade & Cloud Hub</title>
     <style>
         * {
             box-sizing: border-box;
@@ -48,14 +48,6 @@
             font-weight: bold;
         }
 
-        .game-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            overflow-y: auto;
-        }
-
         .game-btn {
             background-color: #334155;
             color: #f8fafc;
@@ -74,7 +66,7 @@
             font-weight: bold;
         }
 
-        /* Game Main Display Area */
+        /* Main Game Display Area */
         #content {
             flex: 1;
             display: flex;
@@ -129,69 +121,56 @@
 
     <div id="sidebar">
         <h1>Arcade Hub</h1>
-        
-        <div class="category-title">Featured</div>
-        <button class="game-btn active" onclick="loadGame('https://eaglercraft.com/mc/1.8.8/', 'Eaglercraft 1.8.8')">Eaglercraft 1.8.8</button>
+
+        <div class="category-title">Cloud & Sandbox</div>
+        <button class="game-btn active" onclick="loadGame('https://now.gg/play/roblox-corporation/5349/roblox', 'Roblox (Cloud)')">Roblox</button>
+        <button class="game-btn" onclick="loadGame('https://eaglercraft.com/mc/1.8.8/', 'Eaglercraft 1.8.8')">Eaglercraft 1.8.8</button>
+        <button class="game-btn" onclick="loadGame('https://eaglercraft.ru/', 'Eaglercraft (Alt Mirror)')">Eaglercraft (Alt)</button>
+
+        <div class="category-title">Android & Cloud Streaming</div>
+        <button class="game-btn" onclick="loadGame('https://www.xbox.com/en-US/play', 'Xbox Cloud Gaming')">Xbox Cloud Gaming</button>
+        <button class="game-btn" onclick="loadGame('https://play.geforcenow.com', 'GeForce NOW')">GeForce NOW</button>
+        <button class="game-btn" onclick="loadGame('https://luna.amazon.com', 'Amazon Luna')">Amazon Luna</button>
 
         <div class="category-title">Action & Driving</div>
-        <button class="game-btn" onclick="loadGame('https://3kho.github.io/projects/slope/index.html', 'Slope')">Slope</button>
-        <button class="game-btn" onclick="loadGame('https://3kho.github.io/projects/drift-hunters/index.html', 'Drift Hunters')">Drift Hunters</button>
-        <button class="game-btn" onclick="loadGame('https://3kho.github.io/projects/moto-x3m/index.html', 'Moto X3M')">Moto X3M</button>
-        <button class="game-btn" onclick="loadGame('https://3kho.github.io/projects/vex7/index.html', 'Vex 7')">Vex 7</button>
+        <button class="game-btn" onclick="loadGame('https://y8.com/embed/slope', 'Slope')">Slope</button>
+        <button class="game-btn" onclick="loadGame('https://y8.com/embed/drift_hunters', 'Drift Hunters')">Drift Hunters</button>
+        <button class="game-btn" onclick="loadGame('https://y8.com/embed/moto_x3m', 'Moto X3M')">Moto X3M</button>
+        <button class="game-btn" onclick="loadGame('https://y8.com/embed/vex_7', 'Vex 7')">Vex 7</button>
 
         <div class="category-title">Strategy & Casual</div>
-        <button class="game-btn" onclick="loadGame('https://3kho.github.io/projects/retro-bowl/index.html', 'Retro Bowl')">Retro Bowl</button>
-        <button class="game-btn" onclick="loadGame('https://3kho.github.io/projects/btd5/index.html', 'Bloons TD 5')">Bloons TD 5</button>
-        <button class="game-btn" onclick="loadGame('https://3kho.github.io/projects/bitlife/index.html', 'BitLife')">BitLife</button>
+        <button class="game-btn" onclick="loadGame('https://y8.com/embed/retro_bowl', 'Retro Bowl')">Retro Bowl</button>
+        <button class="game-btn" onclick="loadGame('https://y8.com/embed/bloons_tower_defense_5', 'Bloons TD 5')">Bloons TD 5</button>
+        <button class="game-btn" onclick="loadGame('https://y8.com/embed/bitlife_online', 'BitLife')">BitLife</button>
 
         <div class="category-title">Multiplayer & Shooter</div>
-        <button class="game-btn" onclick="loadGame('https://3kho.github.io/projects/1v1.lol/index.html', '1v1.LOL')">1v1.LOL</button>
+        <button class="game-btn" onclick="loadGame('https://1v1.lol', '1v1.LOL')">1v1.LOL</button>
         <button class="game-btn" onclick="loadGame('https://shellshock.io', 'Shell Shockers')">Shell Shockers</button>
         <button class="game-btn" onclick="loadGame('https://smashkarts.io', 'Smash Karts')">Smash Karts</button>
     </div>
 
     <div id="content">
         <div id="topbar">
-            <div id="game-title">Eaglercraft 1.8.8</div>
+            <div id="game-title">Roblox</div>
             <div class="controls">
-                <button class="ctrl-btn" onclick="reloadGame()">Reload Game</button>
+                <button class="ctrl-btn" onclick="openDirect()">Open in Tab (If Blocked)</button>
+                <button class="ctrl-btn" onclick="reloadGame()">Reload</button>
                 <button class="ctrl-btn" onclick="toggleFullscreen()">Fullscreen</button>
             </div>
         </div>
-        <iframe id="game-frame" src="https://eaglercraft.com/mc/1.8.8/" allowfullscreen></iframe>
+        <iframe id="game-frame" src="https://now.gg/play/roblox-corporation/5349/roblox" allow="autoplay; gamepad; fullscreen; microphone;" allowfullscreen></iframe>
     </div>
 
     <script>
         const iframe = document.getElementById('game-frame');
         const titleDisplay = document.getElementById('game-title');
         const buttons = document.querySelectorAll('.game-btn');
+        let currentUrl = "https://now.gg/play/roblox-corporation/5349/roblox";
 
         function loadGame(url, name) {
+            currentUrl = url;
             iframe.src = url;
             titleDisplay.innerText = name;
 
             buttons.forEach(btn => {
-                if(btn.innerText === name) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
-        }
-
-        function reloadGame() {
-            iframe.src = iframe.src;
-        }
-
-        function toggleFullscreen() {
-            if (!document.fullscreenElement) {
-                iframe.requestFullscreen().catch(err => {
-                    alert(`Error trying to enable full-screen mode: ${err.message}`);
-                });
-            } else {
-                document.exitFullscreen();
-            }
-        }
-    </script>
-</body>
-</html>
+                if(btn.
