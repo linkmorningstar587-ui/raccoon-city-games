@@ -3,174 +3,706 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unblocked Arcade & Cloud Hub</title>
+    <title id="page-title">Google Classroom - Assignments</title>
+    <link id="page-favicon" rel="icon" href="https://ssl.gstatic.com/classroom/favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        /* Custom scrollbar for game menu */
+        ::-webkit-scrollbar {
+            width: 6px;
         }
-
-        body {
-            background-color: #0f172a;
-            color: #f8fafc;
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
         }
-
-        /* Sidebar Navigation */
-        #sidebar {
-            width: 280px;
-            background-color: #1e293b;
-            border-right: 1px solid #334155;
-            display: flex;
-            flex-direction: column;
-            padding: 20px 15px;
-            gap: 15px;
-        }
-
-        #sidebar h1 {
-            font-size: 1.2rem;
-            color: #38bdf8;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #334155;
-        }
-
-        .category-title {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            color: #94a3b8;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-
-        .game-btn {
-            background-color: #334155;
-            color: #f8fafc;
-            border: none;
-            padding: 10px 14px;
-            border-radius: 6px;
-            text-align: left;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .game-btn:hover, .game-btn.active {
-            background-color: #0284c7;
-            color: #ffffff;
-            font-weight: bold;
-        }
-
-        /* Main Game Display Area */
-        #content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            background-color: #020617;
-        }
-
-        #topbar {
-            height: 50px;
-            background-color: #0f172a;
-            border-bottom: 1px solid #334155;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-        }
-
-        #game-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-        .controls {
-            display: flex;
-            gap: 10px;
-        }
-
-        .ctrl-btn {
-            background-color: #334155;
-            color: white;
-            border: none;
-            padding: 6px 12px;
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
             border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.85rem;
         }
-
-        .ctrl-btn:hover {
-            background-color: #475569;
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
         }
-
-        #game-frame {
-            flex: 1;
-            width: 100%;
-            height: 100%;
-            border: none;
-            background-color: #000;
+        .canvas-game {
+            image-rendering: pixelated;
         }
     </style>
 </head>
-<body>
+<body class="bg-slate-950 text-slate-100 font-sans h-screen flex flex-col overflow-hidden select-none">
 
-    <div id="sidebar">
-        <h1>Arcade Hub</h1>
-
-        <div class="category-title">Cloud & Sandbox</div>
-        <button class="game-btn active" onclick="loadGame('https://now.gg/play/roblox-corporation/5349/roblox', 'Roblox (Cloud)')">Roblox</button>
-        <button class="game-btn" onclick="loadGame('https://eaglercraft.com/mc/1.8.8/', 'Eaglercraft 1.8.8')">Eaglercraft 1.8.8</button>
-        <button class="game-btn" onclick="loadGame('https://eaglercraft.ru/', 'Eaglercraft (Alt Mirror)')">Eaglercraft (Alt)</button>
-
-        <div class="category-title">Android & Cloud Streaming</div>
-        <button class="game-btn" onclick="loadGame('https://www.xbox.com/en-US/play', 'Xbox Cloud Gaming')">Xbox Cloud Gaming</button>
-        <button class="game-btn" onclick="loadGame('https://play.geforcenow.com', 'GeForce NOW')">GeForce NOW</button>
-        <button class="game-btn" onclick="loadGame('https://luna.amazon.com', 'Amazon Luna')">Amazon Luna</button>
-
-        <div class="category-title">Action & Driving</div>
-        <button class="game-btn" onclick="loadGame('https://y8.com/embed/slope', 'Slope')">Slope</button>
-        <button class="game-btn" onclick="loadGame('https://y8.com/embed/drift_hunters', 'Drift Hunters')">Drift Hunters</button>
-        <button class="game-btn" onclick="loadGame('https://y8.com/embed/moto_x3m', 'Moto X3M')">Moto X3M</button>
-        <button class="game-btn" onclick="loadGame('https://y8.com/embed/vex_7', 'Vex 7')">Vex 7</button>
-
-        <div class="category-title">Strategy & Casual</div>
-        <button class="game-btn" onclick="loadGame('https://y8.com/embed/retro_bowl', 'Retro Bowl')">Retro Bowl</button>
-        <button class="game-btn" onclick="loadGame('https://y8.com/embed/bloons_tower_defense_5', 'Bloons TD 5')">Bloons TD 5</button>
-        <button class="game-btn" onclick="loadGame('https://y8.com/embed/bitlife_online', 'BitLife')">BitLife</button>
-
-        <div class="category-title">Multiplayer & Shooter</div>
-        <button class="game-btn" onclick="loadGame('https://1v1.lol', '1v1.LOL')">1v1.LOL</button>
-        <button class="game-btn" onclick="loadGame('https://shellshock.io', 'Shell Shockers')">Shell Shockers</button>
-        <button class="game-btn" onclick="loadGame('https://smashkarts.io', 'Smash Karts')">Smash Karts</button>
-    </div>
-
-    <div id="content">
-        <div id="topbar">
-            <div id="game-title">Roblox</div>
-            <div class="controls">
-                <button class="ctrl-btn" onclick="openDirect()">Open in Tab (If Blocked)</button>
-                <button class="ctrl-btn" onclick="reloadGame()">Reload</button>
-                <button class="ctrl-btn" onclick="toggleFullscreen()">Fullscreen</button>
+    <!-- Panic Overlay Screen (Hidden by default) -->
+    <div id="panic-screen" class="hidden fixed inset-0 z-[9999] bg-white text-slate-900 p-8 flex-col font-sans overflow-auto">
+        <header class="border-b pb-4 mb-6 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-emerald-600 rounded flex items-center justify-center text-white font-bold text-xl">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-slate-800">Classroom: Computer Science & Digital Literacy</h1>
+                    <p class="text-sm text-slate-500">Period 3 • Due Today at 11:50 PM</p>
+                </div>
             </div>
-        </div>
-        <iframe id="game-frame" src="https://now.gg/play/roblox-corporation/5349/roblox" allow="autoplay; gamepad; fullscreen; microphone;" allowfullscreen></iframe>
+            <button onclick="togglePanic()" class="px-3 py-1 bg-slate-100 border text-slate-600 text-xs rounded hover:bg-slate-200">Return</button>
+        </header>
+        <main class="max-w-4xl mx-auto space-y-6">
+            <div class="bg-slate-50 border p-6 rounded-lg">
+                <h2 class="text-lg font-semibold text-slate-800 mb-2">Assignment: JavaScript Event Loop & DOM Manipulation</h2>
+                <p class="text-sm text-slate-600 leading-relaxed mb-4">
+                    Please review the provided source materials on event listeners, asynchronous callbacks, and canvas rendering. Answer questions 1 through 5 in your digital notebook before submitting your code sample below.
+                </p>
+                <div class="p-4 bg-slate-800 text-emerald-400 font-mono text-xs rounded overflow-x-auto">
+                    <code>
+                        // Sample Code Task:<br>
+                        function initializeTask() {<br>
+                        &nbsp;&nbsp;const canvas = document.getElementById('canvas');<br>
+                        &nbsp;&nbsp;console.log("Loading module resources...");<br>
+                        }<br>
+                        window.onload = initializeTask;
+                    </code>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="p-4 border rounded bg-white shadow-sm">
+                    <h3 class="font-medium text-slate-800 mb-1"><i class="fa-solid fa-file-pdf text-red-500 mr-2"></i>Unit_3_Lecture_Notes.pdf</h3>
+                    <p class="text-xs text-slate-500">2.4 MB • Google Drive</p>
+                </div>
+                <div class="p-4 border rounded bg-white shadow-sm">
+                    <h3 class="font-medium text-slate-800 mb-1"><i class="fa-solid fa-link text-blue-500 mr-2"></i>Documentation Reference</h3>
+                    <p class="text-xs text-slate-500">MDN Web Docs</p>
+                </div>
+            </div>
+        </main>
     </div>
 
+    <!-- Main Navigation Header -->
+    <header class="h-14 bg-slate-900 border-b border-slate-800 px-4 flex items-center justify-between shrink-0 z-20">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-gradient-to-tr from-cyan-500 to-blue-600 rounded-lg flex items-center justify-center text-white font-bold shadow-lg shadow-cyan-500/20">
+                <i class="fa-solid fa-gamepad"></i>
+            </div>
+            <span class="font-bold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+                NEXUS UNBLOCKED HUB
+            </span>
+            <span class="text-xs px-2 py-0.5 rounded bg-slate-800 text-cyan-400 border border-slate-700 font-mono">v4.5 PRO</span>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <!-- Cloaker Toggle -->
+            <button onclick="toggleCloak()" id="cloak-btn" title="Toggle Tab Title & Icon Stealth" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded text-xs font-medium border border-slate-700 flex items-center gap-2 transition-all">
+                <i class="fa-solid fa-mask text-cyan-400"></i>
+                <span id="cloak-status">Tab Cloak: Classroom</span>
+            </button>
+
+            <!-- Panic Hotkey Hint -->
+            <button onclick="togglePanic()" title="Instant Emergency Panic Screen (Press 'P' or 'Esc')" class="px-3 py-1.5 bg-red-950/60 hover:bg-red-900/80 text-red-300 rounded text-xs font-medium border border-red-800/60 flex items-center gap-2 transition-all">
+                <i class="fa-solid fa-shield-halved text-red-400"></i>
+                <span>Panic Screen [P]</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- App Body Container -->
+    <div class="flex-1 flex overflow-hidden">
+
+        <!-- Sidebar Navigation -->
+        <aside class="w-72 bg-slate-900 border-r border-slate-800 flex flex-col shrink-0">
+            <!-- Category Menu List -->
+            <div class="flex-1 overflow-y-auto p-3 space-y-4">
+
+                <!-- Category: Native Offline Games -->
+                <div>
+                    <div class="text-[10px] font-bold uppercase tracking-wider text-cyan-400 px-2 mb-1.5 flex items-center gap-1.5">
+                        <i class="fa-solid fa-microchip"></i> Built-In Offline Canvas (100% Unblocked)
+                    </div>
+                    <div class="space-y-1">
+                        <button onclick="selectGame('native-slope')" class="game-nav-btn w-full text-left px-3 py-2 rounded-md text-xs font-medium bg-cyan-950/40 text-cyan-300 border border-cyan-800/50 flex items-center justify-between hover:bg-cyan-900/50 transition-all">
+                            <span><i class="fa-solid fa-cubes mr-2"></i>3D Canvas Slope Runner</span>
+                            <span class="text-[9px] uppercase px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-semibold">NATIVE</span>
+                        </button>
+                        <button onclick="selectGame('native-breaker')" class="game-nav-btn w-full text-left px-3 py-2 rounded-md text-xs font-medium bg-cyan-950/40 text-cyan-300 border border-cyan-800/50 flex items-center justify-between hover:bg-cyan-900/50 transition-all">
+                            <span><i class="fa-solid fa-table-cells-large mr-2"></i>Retro Brick Breaker</span>
+                            <span class="text-[9px] uppercase px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-semibold">NATIVE</span>
+                        </button>
+                        <button onclick="selectGame('native-space')" class="game-nav-btn w-full text-left px-3 py-2 rounded-md text-xs font-medium bg-cyan-950/40 text-cyan-300 border border-cyan-800/50 flex items-center justify-between hover:bg-cyan-900/50 transition-all">
+                            <span><i class="fa-solid fa-rocket mr-2"></i>Space Defender 2D</span>
+                            <span class="text-[9px] uppercase px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-semibold">NATIVE</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Category: Minecraft & Sandbox -->
+                <div>
+                    <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400 px-2 mb-1.5 flex items-center gap-1.5">
+                        <i class="fa-solid fa-cube text-emerald-400"></i> Minecraft & Sandbox
+                    </div>
+                    <div class="space-y-1">
+                        <button onclick="selectGame('eagler-188')" class="game-nav-btn w-full text-left px-3 py-2 rounded-md text-xs text-slate-300 hover:bg-slate-800 hover:text-white transition-all flex items-center justify-between">
+                            <span><i class="fa-solid fa-box mr-2 text-emerald-400"></i>Eaglercraft 1.8.8</span>
+                        </button>
+                        <button onclick="selectGame('eagler-152')" class="game-nav-btn w-full text-left px-3 py-2 rounded-md text-xs text-slate-300 hover:bg-slate-800 hover:text-white transition-all flex items-center justify-between">
+                            <span><i class="fa-solid fa-cube mr-2 text-emerald-500"></i>Eaglercraft 1.5.2</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Category: Cloud & Android -->
+                <div>
+                    <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400 px-2 mb-1.5 flex items-center gap-1.5">
+                        <i class="fa-solid fa-cloud text-purple-400"></i> Cloud & Android Gaming
+                    </div>
+                    <div class="space-y-1">
+                        <button onclick="selectGame('roblox-cloud')" class="game-nav-btn w-full text-left px-3 py-2 rounded-md text-xs text-slate-300 hover:bg-slate-800 hover:text-white transition-all flex items-center justify-between">
+                            <span><i class="fa-solid fa-robot mr-2 text-red-400"></i>Roblox (Now.gg Cloud)</span>
+                        </button>
+                        <button onclick="selectGame('xbox-cloud')" class="game-nav-btn w-full text-left px-3 py-2 rounded-md text-xs text-slate-300 hover:bg-slate-800 hover:text-white transition-all flex items-center justify-between">
+                            <span><i class="fa-brands fa-xbox mr-2 text-green-500"></i>Xbox Cloud Gaming</span>
+                        </button>
+                        <button onclick="selectGame('geforce-now')" class="game-nav-btn w-full text-left px-3 py-2 rounded-md text-xs text-slate-300 hover:bg-slate-800 hover:text-white transition-all flex items-center justify-between">
+                            <span><i class="fa-solid fa-display mr-2 text-green-400"></i>GeForce NOW Web</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Category: Action & Sports -->
+                <div>
+                    <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400 px-2 mb-1.5 flex items-center gap-1.5">
+                        <i class="fa-solid fa-car-burst text-amber-400"></i> Action & Driving
+                    </div>
+                    <div class="space-y-1">
+                        <button onclick="selectGame('slope-web')" class="game-nav-btn w-full text-left px-3 py-2 rounded-md text-xs text-slate-300 hover:bg-slate-800 hover:text-white transition-all flex items-center justify-between">
+                            <span><i class="fa-solid fa-circle-dot mr-2 text-amber-400"></i>Slope 3D (Web)</span>
+                        </button>
+                        <button onclick="selectGame('drift-hunters')" class="game-nav-btn w-full text-left px-3 py-2 rounded-md text-xs text-slate-300 hover:bg-slate-800 hover:text-white transition-all flex items-center justify-between">
+                            <span><i class="fa-solid fa-car mr-2 text-blue-400"></i>Drift Hunters</span>
+                        </button>
+                        <button onclick="selectGame('moto-x3m')" class="game-nav-btn w-full text-left px-3 py-2 rounded-md text-xs text-slate-300 hover:bg-slate-800 hover:text-white transition-all flex items-center justify-between">
+                            <span><i class="fa-solid fa-motorcycle mr-2 text-yellow-400"></i>Moto X3M</span>
+                        </button>
+                        <button onclick="selectGame('vex-7')" class="game-nav-btn w-full text-left px-3 py-2 rounded-md text-xs text-slate-300 hover:bg-slate-800 hover:text-white transition-all flex items-center justify-between">
+                            <span><i class="fa-solid fa-person-running mr-2 text-teal-400"></i>Vex 7 Parkour</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Category: Strategy & Casual -->
+                <div>
+                    <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400 px-2 mb-1.5 flex items-center gap-1.5">
+                        <i class="fa-solid fa-brain text-rose-400"></i> Strategy & Casual
+                    </div>
+                    <div class="space-y-1">
+                        <button onclick="selectGame('retro-bowl')" class="game-nav-btn w-full text-left px-3 py-2 rounded-md text-xs text-slate-300 hover:bg-slate-800 hover:text-white transition-all flex items-center justify-between">
+                            <span><i class="fa-solid fa-football mr-2 text-amber-600"></i>Retro Bowl</span>
+                        </button>
+                        <button onclick="selectGame('btd5')" class="game-nav-btn w-full text-left px-3 py-2 rounded-md text-xs text-slate-300 hover:bg-slate-800 hover:text-white transition-all flex items-center justify-between">
+                            <span><i class="fa-solid fa-crosshair mr-2 text-rose-400"></i>Bloons TD 5</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Sidebar Footer status -->
+            <div class="p-3 border-t border-slate-800 bg-slate-900/50 text-[11px] text-slate-400 flex items-center justify-between">
+                <span><i class="fa-solid fa-wifi text-emerald-400 mr-1"></i> Bypasser Ready</span>
+                <span id="active-game-tag" class="font-mono text-cyan-400 truncate max-w-[100px]">Slope</span>
+            </div>
+        </aside>
+
+        <!-- Main Workspace Area -->
+        <main class="flex-1 flex flex-col bg-slate-950 relative overflow-hidden">
+
+            <!-- Control Bar above Frame -->
+            <div class="h-12 bg-slate-900/90 border-b border-slate-800 px-4 flex items-center justify-between shrink-0">
+                <div class="flex items-center gap-3">
+                    <h2 id="current-game-title" class="font-semibold text-slate-200 text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-gamepad text-cyan-400"></i> 3D Canvas Slope Runner
+                    </h2>
+                    <span id="source-badge" class="text-[10px] px-2 py-0.5 rounded bg-cyan-950 text-cyan-400 border border-cyan-800">Canvas Native</span>
+                </div>
+
+                <!-- Game Utility Controls -->
+                <div class="flex items-center gap-2">
+                    <button onclick="openAboutBlank()" title="Open game in an About:Blank stealth popup window to bypass extension blockers" class="px-3 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-white rounded text-xs font-medium flex items-center gap-1.5 shadow-md shadow-cyan-600/20 transition-all">
+                        <i class="fa-solid fa-up-right-from-square text-[10px]"></i>
+                        <span>About:Blank Tab</span>
+                    </button>
+                    <button onclick="reloadActiveGame()" title="Refresh embed frame" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded text-xs font-medium border border-slate-700 transition-all">
+                        <i class="fa-solid fa-rotate-right"></i>
+                    </button>
+                    <button onclick="toggleFullscreen()" title="Fullscreen mode" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded text-xs font-medium border border-slate-700 transition-all">
+                        <i class="fa-solid fa-expand"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Game Container Viewport -->
+            <div id="game-container" class="flex-1 relative bg-black flex items-center justify-center overflow-hidden">
+
+                <!-- Native HTML5 Canvas Display (Displayed for Native Mode) -->
+                <div id="canvas-wrapper" class="relative w-full h-full flex items-center justify-center bg-slate-950">
+                    <canvas id="gameCanvas" class="canvas-game max-w-full max-h-full border border-slate-800 shadow-2xl rounded"></canvas>
+                    <div id="canvas-controls-overlay" class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-slate-900/80 backdrop-blur border border-slate-700/60 text-slate-300 px-4 py-2 rounded-full text-xs flex items-center gap-4 pointer-events-none">
+                        <span><kbd class="px-1.5 py-0.5 bg-slate-800 border border-slate-600 rounded text-[10px]">A</kbd> / <kbd class="px-1.5 py-0.5 bg-slate-800 border border-slate-600 rounded text-[10px]">D</kbd> or <kbd class="px-1.5 py-0.5 bg-slate-800 border border-slate-600 rounded text-[10px]">←</kbd> <kbd class="px-1.5 py-0.5 bg-slate-800 border border-slate-600 rounded text-[10px]">→</kbd> Move</span>
+                        <span><kbd class="px-1.5 py-0.5 bg-slate-800 border border-slate-600 rounded text-[10px]">Space</kbd> Jump / Fire</span>
+                    </div>
+                </div>
+
+                <!-- Web External Iframe View (Displayed for Cloud/Web Mode) -->
+                <div id="iframe-wrapper" class="hidden w-full h-full relative">
+                    <iframe id="game-iframe" class="w-full h-full border-0 bg-black" allow="autoplay; gamepad; fullscreen; microphone;" allowfullscreen></iframe>
+                    
+                    <!-- Fallback Overlay Banner if External Iframe is Refused or Blocked -->
+                    <div id="iframe-fallback-notice" class="hidden absolute inset-0 bg-slate-950/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center z-10">
+                        <div class="w-16 h-16 bg-amber-500/10 rounded-full flex items-center justify-center text-amber-400 mb-4 text-2xl border border-amber-500/20">
+                            <i class="fa-solid fa-shield-virus"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-100 mb-2">Embed Restricted by Provider Header</h3>
+                        <p class="text-xs text-slate-400 max-w-md mb-6 leading-relaxed">
+                            This specific service (e.g. Roblox, Xbox Cloud) prevents direct embedded frame rendering due to strict security headers (`X-Frame-Options`). Launch it directly in a stealth window to bypass.
+                        </p>
+                        <button onclick="openAboutBlank()" class="px-5 py-2.5 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg text-sm font-semibold shadow-lg shadow-cyan-600/30 flex items-center gap-2 transition-all">
+                            <i class="fa-solid fa-up-right-from-square"></i>
+                            <span>Launch in Stealth Window</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- JavaScript Application Logic & Built-In Canvas Games -->
     <script>
-        const iframe = document.getElementById('game-frame');
-        const titleDisplay = document.getElementById('game-title');
-        const buttons = document.querySelectorAll('.game-btn');
-        let currentUrl = "https://now.gg/play/roblox-corporation/5349/roblox";
+        /* =============================================================
+           1. Application State & Global References
+           ============================================================= */
+        const gameCatalog = {
+            'native-slope': { title: '3D Canvas Slope Runner', type: 'canvas', engine: 'slope' },
+            'native-breaker': { title: 'Retro Brick Breaker', type: 'canvas', engine: 'breaker' },
+            'native-space': { title: 'Space Defender 2D', type: 'canvas', engine: 'space' },
+            'eagler-188': { title: 'Eaglercraft 1.8.8', type: 'iframe', url: 'https://eaglercraft.com/mc/1.8.8/' },
+            'eagler-152': { title: 'Eaglercraft 1.5.2', type: 'iframe', url: 'https://g.eaglercraft.com/1.5.2/' },
+            'roblox-cloud': { title: 'Roblox (Now.gg Cloud)', type: 'iframe', url: 'https://now.gg/play/roblox-corporation/5349/roblox' },
+            'xbox-cloud': { title: 'Xbox Cloud Gaming', type: 'iframe', url: 'https://www.xbox.com/en-US/play' },
+            'geforce-now': { title: 'GeForce NOW Web', type: 'iframe', url: 'https://play.geforcenow.com' },
+            'slope-web': { title: 'Slope 3D (Web Mirror)', type: 'iframe', url: 'https://y8.com/embed/slope' },
+            'drift-hunters': { title: 'Drift Hunters', type: 'iframe', url: 'https://y8.com/embed/drift_hunters' },
+            'moto-x3m': { title: 'Moto X3M', type: 'iframe', url: 'https://y8.com/embed/moto_x3m' },
+            'vex-7': { title: 'Vex 7 Parkour', type: 'iframe', url: 'https://y8.com/embed/vex_7' },
+            'retro-bowl': { title: 'Retro Bowl', type: 'iframe', url: 'https://y8.com/embed/retro_bowl' },
+            'btd5': { title: 'Bloons TD 5', type: 'iframe', url: 'https://y8.com/embed/bloons_tower_defense_5' }
+        };
 
-        function loadGame(url, name) {
-            currentUrl = url;
-            iframe.src = url;
-            titleDisplay.innerText = name;
+        let currentActiveKey = 'native-slope';
+        let isCloaked = true;
+        let animFrameId = null;
 
-            buttons.forEach(btn => {
-                if(btn.
+        const canvasWrapper = document.getElementById('canvas-wrapper');
+        const iframeWrapper = document.getElementById('iframe-wrapper');
+        const gameIframe = document.getElementById('game-iframe');
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const currentGameTitle = document.getElementById('current-game-title');
+        const sourceBadge = document.getElementById('source-badge');
+        const activeGameTag = document.getElementById('active-game-tag');
+
+        /* =============================================================
+           2. Dashboard Navigation & Window Management
+           ============================================================= */
+        function selectGame(key) {
+            const game = gameCatalog[key];
+            if (!game) return;
+
+            currentActiveKey = key;
+            currentGameTitle.innerHTML = `<i class="fa-solid fa-gamepad text-cyan-400"></i> ${game.title}`;
+            activeGameTag.innerText = game.title;
+
+            // Stop any running native canvas loop
+            if (animFrameId) {
+                cancelAnimationFrame(animFrameId);
+                animFrameId = null;
+            }
+
+            if (game.type === 'canvas') {
+                iframeWrapper.classList.add('hidden');
+                canvasWrapper.classList.remove('hidden');
+                sourceBadge.innerText = 'Canvas Native';
+                sourceBadge.className = 'text-[10px] px-2 py-0.5 rounded bg-cyan-950 text-cyan-400 border border-cyan-800';
+                initCanvasEngine(game.engine);
+            } else {
+                canvasWrapper.classList.add('hidden');
+                iframeWrapper.classList.remove('hidden');
+                sourceBadge.innerText = 'Web Embed';
+                sourceBadge.className = 'text-[10px] px-2 py-0.5 rounded bg-purple-950 text-purple-400 border border-purple-800';
+                
+                gameIframe.src = game.url;
+
+                // Show notice for known header-blocking services
+                const notice = document.getElementById('iframe-fallback-notice');
+                if (key === 'roblox-cloud' || key === 'xbox-cloud' || key === 'geforce-now') {
+                    notice.classList.remove('hidden');
+                } else {
+                    notice.classList.add('hidden');
+                }
+            }
+        }
+
+        function reloadActiveGame() {
+            selectGame(currentActiveKey);
+        }
+
+        function openAboutBlank() {
+            const game = gameCatalog[currentActiveKey];
+            const targetUrl = game.type === 'iframe' ? game.url : window.location.href;
+
+            const win = window.open('about:blank', '_blank');
+            if (win) {
+                win.document.title = "Google Docs";
+                const doc = win.document;
+                const iframe = doc.createElement('iframe');
+                iframe.style.width = "100vw";
+                iframe.style.height = "100vh";
+                iframe.style.border = "none";
+                iframe.style.position = "fixed";
+                iframe.style.top = "0";
+                iframe.style.left = "0";
+                iframe.src = targetUrl;
+                doc.body.style.margin = "0";
+                doc.body.style.overflow = "hidden";
+                doc.body.appendChild(iframe);
+            } else {
+                alert("Popup was blocked! Please allow popups for this site to use stealth mode.");
+            }
+        }
+
+        function toggleFullscreen() {
+            const elem = document.getElementById('game-container');
+            if (!document.fullscreenElement) {
+                elem.requestFullscreen().catch(err => {
+                    console.log(`Error attempting fullscreen: ${err.message}`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        /* =============================================================
+           3. Stealth Cloaker & Panic Hotkey
+           ============================================================= */
+        function toggleCloak() {
+            isCloaked = !isCloaked;
+            const titleEl = document.getElementById('page-title');
+            const faviconEl = document.getElementById('page-favicon');
+            const statusEl = document.getElementById('cloak-status');
+
+            if (isCloaked) {
+                titleEl.innerText = "Google Classroom - Assignments";
+                faviconEl.href = "https://ssl.gstatic.com/classroom/favicon.png";
+                statusEl.innerText = "Tab Cloak: Classroom";
+            } else {
+                titleEl.innerText = "Nexus Unblocked Arcade";
+                faviconEl.href = "https://cdn-icons-png.flaticon.com/512/686/686589.png";
+                statusEl.innerText = "Tab Cloak: Off";
+            }
+        }
+
+        function togglePanic() {
+            const panicScreen = document.getElementById('panic-screen');
+            panicScreen.classList.toggle('hidden');
+        }
+
+        // Global Keyboard Shortcut Listener
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') {
+                togglePanic();
+            }
+        });
+
+        /* =============================================================
+           4. Native Canvas Game Engines (Offline Fallbacks)
+           ============================================================= */
+        const keys = {};
+        window.addEventListener('keydown', e => keys[e.code] = true);
+        window.addEventListener('keyup', e => keys[e.code] = false);
+
+        function initCanvasEngine(engine) {
+            canvas.width = 800;
+            canvas.height = 500;
+
+            if (engine === 'slope') runSlopeEngine();
+            else if (engine === 'breaker') runBreakerEngine();
+            else if (engine === 'space') runSpaceEngine();
+        }
+
+        /* ----- Engine A: 3D-Style Slope Runner ----- */
+        function runSlopeEngine() {
+            let ballX = 400;
+            let ballY = 400;
+            let ballRadius = 14;
+            let speedX = 0;
+            let obstacles = [];
+            let frameCount = 0;
+            let score = 0;
+            let gameOver = false;
+
+            function loop() {
+                ctx.fillStyle = '#0f172a';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // Perspective grid lines
+                ctx.strokeStyle = '#1e293b';
+                ctx.lineWidth = 1;
+                for (let x = -400; x <= 1200; x += 60) {
+                    ctx.beginPath();
+                    ctx.moveTo(x, canvas.height);
+                    ctx.lineTo(400 + (x - 400) * 0.1, 0);
+                    ctx.stroke();
+                }
+
+                if (!gameOver) {
+                    frameCount++;
+                    score++;
+
+                    // Controls
+                    if (keys['ArrowLeft'] || keys['KeyA']) speedX -= 0.6;
+                    if (keys['ArrowRight'] || keys['KeyD']) speedX += 0.6;
+
+                    speedX *= 0.92; // Friction
+                    ballX += speedX;
+
+                    // Bound checks
+                    if (ballX < 150 || ballX > 650) gameOver = true;
+
+                    // Spawn obstacle waves
+                    if (frameCount % 30 === 0) {
+                        obstacles.push({
+                            x: Math.random() * 400 + 200,
+                            z: 0,
+                            width: Math.random() * 40 + 30
+                        });
+                    }
+
+                    // Render & update obstacles
+                    for (let i = obstacles.length - 1; i >= 0; i--) {
+                        let obs = obstacles[i];
+                        obs.z += 0.025; // Speed factor
+
+                        let renderY = obs.z * canvas.height;
+                        let renderX = 400 + (obs.x - 400) * obs.z;
+                        let renderW = obs.width * obs.z;
+                        let renderH = 30 * obs.z;
+
+                        ctx.fillStyle = '#ef4444';
+                        ctx.fillRect(renderX - renderW / 2, renderY, renderW, renderH);
+
+                        // Collision Check
+                        if (obs.z > 0.85 && obs.z < 0.98) {
+                            if (Math.abs(ballX - renderX) < (renderW / 2 + ballRadius)) {
+                                gameOver = true;
+                            }
+                        }
+
+                        if (obs.z > 1.1) obstacles.splice(i, 1);
+                    }
+
+                    // Render Player Ball
+                    ctx.beginPath();
+                    ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
+                    ctx.fillStyle = '#06b6d4';
+                    ctx.shadowColor = '#06b6d4';
+                    ctx.shadowBlur = 15;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+
+                    // HUD
+                    ctx.fillStyle = '#ffffff';
+                    ctx.font = '16px monospace';
+                    ctx.fillText(`SCORE: ${score}`, 20, 30);
+                } else {
+                    ctx.fillStyle = '#f87171';
+                    ctx.font = 'bold 30px sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('CRASHED!', canvas.width / 2, canvas.height / 2 - 20);
+                    ctx.fillStyle = '#94a3b8';
+                    ctx.font = '16px sans-serif';
+                    ctx.fillText('Press SPACE to Restart', canvas.width / 2, canvas.height / 2 + 20);
+                    ctx.textAlign = 'left';
+
+                    if (keys['Space']) {
+                        runSlopeEngine();
+                        return;
+                    }
+                }
+
+                animFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        /* ----- Engine B: Retro Brick Breaker ----- */
+        function runBreakerEngine() {
+            let paddleW = 100, paddleH = 12;
+            let paddleX = (canvas.width - paddleW) / 2;
+            let ballX = canvas.width / 2, ballY = canvas.height - 40;
+            let dx = 4, dy = -4;
+            let ballR = 7;
+            let score = 0;
+
+            const rowCount = 5, colCount = 9;
+            const brickW = 75, brickH = 18, brickPadding = 8, offsetTop = 40, offsetLeft = 30;
+
+            let bricks = [];
+            for (let c = 0; c < colCount; c++) {
+                bricks[c] = [];
+                for (let r = 0; r < rowCount; r++) {
+                    bricks[c][r] = { x: 0, y: 0, status: 1 };
+                }
+            }
+
+            function loop() {
+                ctx.fillStyle = '#020617';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // Paddle controls
+                if (keys['ArrowLeft'] || keys['KeyA']) paddleX = Math.max(0, paddleX - 7);
+                if (keys['ArrowRight'] || keys['KeyD']) paddleX = Math.min(canvas.width - paddleW, paddleX + 7);
+
+                // Ball movement
+                ballX += dx;
+                ballY += dy;
+
+                if (ballX + dx > canvas.width - ballR || ballX + dx < ballR) dx = -dx;
+                if (ballY + dy < ballR) dy = -dy;
+                else if (ballY + dy > canvas.height - paddleH - 10) {
+                    if (ballX > paddleX && ballX < paddleX + paddleW) {
+                        dy = -dy;
+                    } else if (ballY > canvas.height) {
+                        // Game Over Reset
+                        runBreakerEngine();
+                        return;
+                    }
+                }
+
+                // Render Bricks & Collisions
+                for (let c = 0; c < colCount; c++) {
+                    for (let r = 0; r < rowCount; r++) {
+                        let b = bricks[c][r];
+                        if (b.status === 1) {
+                            let bx = c * (brickW + brickPadding) + offsetLeft;
+                            let by = r * (brickH + brickPadding) + offsetTop;
+                            b.x = bx;
+                            b.y = by;
+
+                            // Collision
+                            if (ballX > bx && ballX < bx + brickW && ballY > by && ballY < by + brickH) {
+                                dy = -dy;
+                                b.status = 0;
+                                score += 10;
+                            }
+
+                            ctx.fillStyle = `hsl(${r * 45}, 70%, 50%)`;
+                            ctx.fillRect(bx, by, brickW, brickH);
+                        }
+                    }
+                }
+
+                // Render Paddle & Ball
+                ctx.fillStyle = '#38bdf8';
+                ctx.fillRect(paddleX, canvas.height - paddleH - 10, paddleW, paddleH);
+
+                ctx.beginPath();
+                ctx.arc(ballX, ballY, ballR, 0, Math.PI * 2);
+                ctx.fillStyle = '#f43f5e';
+                ctx.fill();
+
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '14px monospace';
+                ctx.fillText(`SCORE: ${score}`, 20, 25);
+
+                animFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        /* ----- Engine C: 2D Space Defender ----- */
+        function runSpaceEngine() {
+            let shipX = canvas.width / 2;
+            let bullets = [];
+            let enemies = [];
+            let score = 0;
+            let frame = 0;
+
+            function loop() {
+                ctx.fillStyle = '#090d16';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                frame++;
+
+                // Controls
+                if (keys['ArrowLeft'] || keys['KeyA']) shipX = Math.max(20, shipX - 6);
+                if (keys['ArrowRight'] || keys['KeyD']) shipX = Math.min(canvas.width - 20, shipX + 6);
+                if (keys['Space'] && frame % 8 === 0) {
+                    bullets.push({ x: shipX, y: canvas.height - 30 });
+                }
+
+                // Spawn Enemies
+                if (frame % 30 === 0) {
+                    enemies.push({ x: Math.random() * (canvas.width - 40) + 20, y: -20, speed: Math.random() * 2 + 1.5 });
+                }
+
+                // Update & Draw Bullets
+                for (let i = bullets.length - 1; i >= 0; i--) {
+                    let b = bullets[i];
+                    b.y -= 8;
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.fillRect(b.x - 2, b.y, 4, 10);
+                    if (b.y < 0) bullets.splice(i, 1);
+                }
+
+                // Update & Draw Enemies
+                for (let i = enemies.length - 1; i >= 0; i--) {
+                    let e = enemies[i];
+                    e.y += e.speed;
+
+                    ctx.fillStyle = '#a855f7';
+                    ctx.beginPath();
+                    ctx.arc(e.x, e.y, 12, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Bullet Collision
+                    for (let j = bullets.length - 1; j >= 0; j--) {
+                        let b = bullets[j];
+                        if (Math.hypot(b.x - e.x, b.y - e.y) < 14) {
+                            enemies.splice(i, 1);
+                            bullets.splice(j, 1);
+                            score += 50;
+                            break;
+                        }
+                    }
+
+                    if (e.y > canvas.height + 20) enemies.splice(i, 1);
+                }
+
+                // Draw Player Ship
+                ctx.fillStyle = '#10b981';
+                ctx.beginPath();
+                ctx.moveTo(shipX, canvas.height - 35);
+                ctx.lineTo(shipX - 18, canvas.height - 10);
+                ctx.lineTo(shipX + 18, canvas.height - 10);
+                ctx.fill();
+
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '14px monospace';
+                ctx.fillText(`SCORE: ${score}`, 20, 25);
+
+                animFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        // Initialize Native Engine on Load
+        window.onload = function() {
+            selectGame('native-slope');
+        };
+    </script>
+</body>
+</html>
